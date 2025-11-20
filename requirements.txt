@@ -1,0 +1,66 @@
+# xwformats Requirements - Enterprise Serialization Formats
+# Company: eXonware.com
+# Author: Eng. Muhammad AlShehri
+# Email: connect@exonware.com
+# Version: 0.0.1.2
+# Generation Date: 02-Nov-2025
+#
+# This file contains all dependencies for xwformats' 18 enterprise formats
+# Compatible with Python 3.8+
+
+# =============================================================================
+# CORE DEPENDENCY
+# =============================================================================
+exonware-xwsystem>=0.0.1       # Foundation library
+
+# =============================================================================
+# SCHEMA FORMATS (7 formats)
+# =============================================================================
+fastavro>=1.4.0                 # Apache Avro (~400 KB)
+protobuf>=3.19.0                # Protocol Buffers (~1 MB)
+thrift>=0.15.0                  # Apache Thrift (~1.5 MB)
+pyarrow>=8.0.0                  # Apache Parquet + Feather (~15 MB)
+pandas>=1.3.0                   # Required by Parquet (~15 MB)
+pyorc>=0.6.0                    # Apache ORC (~500 KB)
+pycapnp>=1.1.0                  # Cap'n Proto (~2 MB) - May require C++ build tools
+flatbuffers>=2.0.0              # FlatBuffers (~200 KB)
+
+# =============================================================================
+# SCIENTIFIC FORMATS (5 formats)
+# =============================================================================
+h5py>=3.8.0                     # HDF5 (~3 MB)
+zarr>=2.15.0                    # Zarr (~500 KB)
+netCDF4>=1.6.0                  # NetCDF (~2 MB)
+scipy>=1.7.0                    # MATLAB MAT files (~38 MB)
+numpy>=1.20.0                   # Required by scientific formats (~5 MB)
+
+# =============================================================================
+# DATABASE FORMATS (3 formats)
+# =============================================================================
+lmdb>=1.4.0                     # LMDB (~300 KB)
+neo4j>=4.4.0                    # Neo4j GraphDB (~3 MB)
+pydgraph>=21.3.0                # Dgraph GraphDB (~2.5 MB)
+plyvel>=1.5.0                   # LevelDB (~500 KB) - May require C++ build tools on Windows
+
+# =============================================================================
+# BINARY FORMATS (1 format)
+# =============================================================================
+py-ubjson>=0.16.0               # UBJSON (~50 KB)
+
+# =============================================================================
+# COMPATIBILITY NOTES
+# =============================================================================
+#
+# Total Size: ~87 MB
+# Total Formats: 18 enterprise formats
+#
+# Special Requirements:
+# - pycapnp: May require C++ build tools
+# - plyvel: May require C++ build tools on Windows
+#   If installation fails, formats gracefully fall back (16/18 still work)
+#
+# Installation Modes:
+# LITE: pip install exonware-xwformats (core only)
+# LAZY: pip install exonware-xwformats[lazy] (auto-install on demand)
+# FULL: pip install exonware-xwformats[full] (all formats pre-installed)
+
