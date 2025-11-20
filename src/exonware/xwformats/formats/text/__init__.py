@@ -6,7 +6,7 @@ Enterprise text serialization formats.
 Company: eXonware.com
 Author: Eng. Muhammad AlShehri
 Email: connect@exonware.com
-Version: 0.0.1.3
+Version: 0.0.1.4
 Generation Date: 02-Nov-2025
 
 Note: Currently empty - reserved for future XML enterprise features.

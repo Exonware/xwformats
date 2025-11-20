@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: Eng. Muhammad AlShehri
 Email: connect@exonware.com
-Version: 0.0.1.3
+Version: 0.0.1.4
 Generation Date: November 2, 2025
 
 Parquet serialization - Apache Parquet columnar storage format.
