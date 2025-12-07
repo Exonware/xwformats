@@ -2,7 +2,7 @@
 # Company: eXonware.com
 # Author: Eng. Muhammad AlShehri
 # Email: connect@exonware.com
-# Version: 0.0.1.5
+# Version: 0.0.1.6
 # Generation Date: 02-Nov-2025
 #
 # This file contains all dependencies for xwformats' 18 enterprise formats
@@ -40,7 +40,7 @@ numpy>=1.20.0                   # Required by scientific formats (~5 MB)
 lmdb>=1.4.0                     # LMDB (~300 KB)
 neo4j>=4.4.0                    # Neo4j GraphDB (~3 MB)
 pydgraph>=21.3.0                # Dgraph GraphDB (~2.5 MB)
-plyvel>=1.5.0                   # LevelDB (~500 KB) - May require C++ build tools on Windows
+# LevelDB uses SQLite (built into Python) - no external dependencies required
 
 # =============================================================================
 # BINARY FORMATS (1 format)
@@ -56,11 +56,9 @@ py-ubjson>=0.16.0               # UBJSON (~50 KB)
 #
 # Special Requirements:
 # - pycapnp: May require C++ build tools
-# - plyvel: May require C++ build tools on Windows
-#   If installation fails, formats gracefully fall back (16/18 still work)
+# - LevelDB: Uses SQLite (built into Python) - works everywhere, no build tools needed
 #
 # Installation Modes:
 # LITE: pip install exonware-xwformats (core only)
-# LAZY: pip install exonware-xwformats[lazy] (auto-install on demand)
 # FULL: pip install exonware-xwformats[full] (all formats pre-installed)
 

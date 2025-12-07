@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: Eng. Muhammad AlShehri
 Email: connect@exonware.com
-Version: 0.0.1.5
+Version: 0.0.1.6
 Generation Date: November 2, 2025
 
 Feather serialization - Fast DataFrame storage.
@@ -35,8 +35,6 @@ class XWFeatherSerializer(ASerialization):
     def __init__(self):
         """Initialize Feather serializer."""
         super().__init__()
-        if pa is None or feather is None:
-            raise ImportError("pyarrow required. Install with: pip install pyarrow")
     
     @property
     def codec_id(self) -> str:

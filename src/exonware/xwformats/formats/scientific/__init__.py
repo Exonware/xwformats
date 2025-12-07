@@ -8,7 +8,6 @@ These are not auto-imported to avoid loading heavy scientific packages.
 """
 
 # Standard imports following DEV_GUIDELINES - no try/except
-# Users with [lazy] extra will have packages auto-installed
 # Users with [full] extra have them pre-installed
 from .hdf5 import XWHdf5Serializer, Hdf5Serializer
 from .feather import XWFeatherSerializer, FeatherSerializer

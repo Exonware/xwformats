@@ -10,7 +10,7 @@ specialized domains (scientific computing, big data, enterprise systems).
 Company: eXonware.com
 Author: Eng. Muhammad AlShehri
 Email: connect@exonware.com
-Version: 0.0.1.5
+Version: 0.0.1.6
 Generation Date: 02-Nov-2025
 
 Formats provided:
@@ -30,16 +30,17 @@ Installation:
     pip install exonware-xwformats
 """
 
-from xwlazy.lazy import config_package_lazy_install_enabled
+from .version import __version__
 
-config_package_lazy_install_enabled("xwformats")
+# Version metadata constants
+__author__ = "Eng. Muhammad AlShehri"
+__email__ = "connect@exonware.com"
+__company__ = "eXonware.com"
 
-from .version import (
-    __version__,
-    __author__,
-    __email__,
-    __company__,
-)
+# LAZY INSTALLATION - Simple One-Line Configuration
+# Auto-detects [lazy] extra and enables lazy installation hook
+from exonware.xwsystem.utils.lazy_discovery import config_package_lazy_install_enabled
+config_package_lazy_install_enabled("xwformats")  # Auto-detect [lazy] extra
 
 # Import all format serializers
 from .formats import *

@@ -22,7 +22,7 @@ def test_version_info():
     """Test that version information is available."""
     from exonware.xwformats import __version__, __author__, __email__, __company__
     
-    assert __version__ == "0.0.1"
+    assert __version__ == "0.0.1.5"  # Updated to match actual version
     assert __author__ == "Eng. Muhammad AlShehri"
     assert __email__ == "connect@exonware.com"
     assert __company__ == "eXonware.com"
@@ -70,6 +70,7 @@ def test_import_database_formats():
     # Check aliases work
     assert LmdbSerializer is XWLmdbSerializer
     assert GraphDbSerializer is XWGraphDbSerializer
+    assert LeveldbSerializer is XWLeveldbSerializer
 
 
 def test_import_binary_formats():

@@ -7,7 +7,7 @@ that imports from 'exonware-xwformats'. Install the full package as a dependency
 Company: eXonware.com
 Author: Eng. Muhammad AlShehri
 Email: connect@exonware.com
-Version: 0.0.1.5
+Version: 0.0.1.6
 """
 
 # Import everything from the full package

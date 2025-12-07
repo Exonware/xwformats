@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-#exonware/xwsystem/src/exonware/xwsystem/io/serialization/formats/scientific/mat.py
+#exonware/xwformats/src/exonware/xwformats/formats/scientific/mat.py
 """
 Company: eXonware.com
 Author: Eng. Muhammad AlShehri
 Email: connect@exonware.com
-Version: 0.0.1.5
+Version: 0.0.1.6
 Generation Date: 02-Nov-2025
 
 MATLAB MAT File Serialization
@@ -22,7 +22,7 @@ Priority 4 (Performance): Efficient array storage
 Priority 5 (Extensibility): Compatible with MATLAB ecosystem
 """
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional, Union
 from pathlib import Path
 import scipy.io
 
@@ -58,7 +58,7 @@ class XWMatSerializer(ASerialization):
         """Supported file extensions."""
         return [".mat"]
     
-    def encode(self, data: Any, options: Optional[Dict[str, Any]] = None) -> bytes:
+    def encode(self, data: Any, options: Optional[dict[str, Any]] = None) -> bytes:
         """
         Encode data to MAT bytes.
         
@@ -87,7 +87,7 @@ class XWMatSerializer(ASerialization):
             "Use encode_to_file() or save to file directly."
         )
     
-    def decode(self, data: bytes, options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def decode(self, data: bytes, options: Optional[dict[str, Any]] = None) -> dict[str, Any]:
         """
         Decode MAT bytes to Python data.
         
@@ -104,7 +104,7 @@ class XWMatSerializer(ASerialization):
         buffer = io.BytesIO(data)
         return loadmat(buffer)
     
-    def encode_to_file(self, data: Any, file_path: Union[str, Path], options: Optional[Dict[str, Any]] = None) -> None:
+    def encode_to_file(self, data: Any, file_path: Union[str, Path], options: Optional[dict[str, Any]] = None) -> None:
         """
         Encode data to MAT file.
         
@@ -125,7 +125,7 @@ class XWMatSerializer(ASerialization):
             do_compression=do_compression
         )
     
-    def decode_from_file(self, file_path: Union[str, Path], options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def decode_from_file(self, file_path: Union[str, Path], options: Optional[dict[str, Any]] = None) -> dict[str, Any]:
         """
         Decode MAT file to Python dict.
         
