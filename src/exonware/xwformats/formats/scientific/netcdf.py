@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: Eng. Muhammad AlShehri
 Email: connect@exonware.com
-Version: 0.0.1.6
+Version: 0.0.1.7
 Generation Date: 02-Nov-2025
 
 NetCDF Serialization - Network Common Data Form
@@ -65,7 +65,7 @@ class XWNetcdfSerializer(ASerialization):
         Encode data to NetCDF bytes.
         
         Args:
-            data: Dict with 'dimensions', 'variables', and optionally 'attributes'
+            data: dict with 'dimensions', 'variables', and optionally 'attributes'
             options: Encoding options
             
         Returns:
@@ -88,7 +88,7 @@ class XWNetcdfSerializer(ASerialization):
             options: Decoding options
             
         Returns:
-            Dict with dimensions, variables, and attributes
+            dict with dimensions, variables, and attributes
             
         Raises:
             SerializationError: If decoding fails
@@ -103,7 +103,7 @@ class XWNetcdfSerializer(ASerialization):
         Encode data to NetCDF file.
         
         Args:
-            data: Dict with 'dimensions', 'variables', and optionally 'attributes'
+            data: dict with 'dimensions', 'variables', and optionally 'attributes'
             file_path: Path to output file
             options: Encoding options
         """
@@ -145,7 +145,7 @@ class XWNetcdfSerializer(ASerialization):
             options: Decoding options
             
         Returns:
-            Dict with dimensions, variables, and attributes
+            dict with dimensions, variables, and attributes
         """
         result = {
             'dimensions': {},

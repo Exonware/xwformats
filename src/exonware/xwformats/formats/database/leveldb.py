@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: Eng. Muhammad AlShehri
 Email: connect@exonware.com
-Version: 0.0.1.6
+Version: 0.0.1.7
 Generation Date: 02-Nov-2025
 
 LevelDB Serialization - Pure Python Key-Value Store (SQLite-based)
