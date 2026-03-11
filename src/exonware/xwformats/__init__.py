@@ -9,7 +9,7 @@ Requirements: docs/REF_01_REQ.md, REF_14_DX (key code), REF_15_API.
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.1.0.2
+Version: 0.9.0.1
 Generation Date: 02-Nov-2025
 Formats provided:
 - Schema: Protobuf, Avro, Parquet, Thrift, ORC, Cap'n Proto, FlatBuffers, Arrow (8)

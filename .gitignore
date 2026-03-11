@@ -61,3 +61,7 @@ Thumbs.db
 # Test output
 **/runner_out.md
 
+# Local secrets and archives
+.secrets
+.archieve/
+
