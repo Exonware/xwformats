@@ -2,28 +2,25 @@
 #exonware/xwformats/src/exonware/xwformats/formats/__init__.py
 """
 Enterprise serialization formats.
-
 Company: eXonware.com
-Author: Eng. Muhammad AlShehri
+Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.1.0.1
+Version: 0.1.0.2
 Generation Date: 02-Nov-2025
 """
-
 # Import all format categories
+
 from . import schema
 from . import database
 from . import binary
 from . import text
 # Scientific formats not imported here to avoid scipy/numpy issues in some environments
 # They can be imported explicitly: from exonware.xwformats.formats import scientific
-
 # Re-export all serializers
 from .schema import *
 from .database import *
 from .binary import *
 from .text import *
-
 __all__ = [
     # Module references
     'schema',
@@ -31,7 +28,6 @@ __all__ = [
     'binary',
     'text',
 ]
-
 # Extend __all__ with all serializers
 __all__.extend(schema.__all__)
 __all__.extend(database.__all__)

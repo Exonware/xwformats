@@ -2,149 +2,124 @@
 #exonware/xwformats/src/exonware/xwformats/__init__.py
 """
 xwformats: Enterprise Serialization Formats
-
 Extended serialization format support for enterprise applications.
 This library provides heavyweight formats that are typically used in
 specialized domains (scientific computing, big data, enterprise systems).
-
+Requirements: docs/REF_01_REQ.md, REF_14_DX (key code), REF_15_API.
 Company: eXonware.com
-Author: Eng. Muhammad AlShehri
+Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.1.0.1
+Version: 0.1.0.2
 Generation Date: 02-Nov-2025
-
 Formats provided:
-- Schema: Protobuf, Avro, Parquet, Thrift, ORC, Cap'n Proto, FlatBuffers (7)
+- Schema: Protobuf, Avro, Parquet, Thrift, ORC, Cap'n Proto, FlatBuffers, Arrow (8)
 - Scientific: HDF5, Feather, Zarr, NetCDF, MAT (5)
-- Database: LMDB, GraphDB, LevelDB (3)
-- Binary: BSON, UBJSON (2)
-- Text: CSV, YAML, TOML, XML (4)
-
-Total: 21 enterprise formats (~87 MB dependencies)
-
+- Database: LMDB, GraphDB, LevelDB, RocksDB (4)
+- Binary: BSON, UBJSON, Bincode, Postcard, Dill (5)
+- Text: CSV, YAML, TOML, XML, RON (5)
+Total: 27 enterprise formats (~98 MB dependencies)
 Installation:
     # Install with all dependencies
     pip install exonware-xwformats[full]
-    
     # Or minimal install (dependencies required separately)
     pip install exonware-xwformats
 """
+# =============================================================================
+# XWLAZY INTEGRATION - Auto-install missing dependencies silently (EARLY)
+# =============================================================================
+# Activate xwlazy BEFORE other imports to enable auto-installation of missing dependencies
+# This enables silent auto-installation of missing libraries when they are imported
 
+try:
+    from exonware.xwlazy import auto_enable_lazy
+    auto_enable_lazy(__package__ or "exonware.xwformats", mode="smart")
+except ImportError:
+    # xwlazy not installed - lazy mode simply stays disabled (normal behavior)
+    pass
 from .version import __version__
-
 # Version metadata constants
-__author__ = "Eng. Muhammad AlShehri"
+__author__ = "eXonware Backend Team"
 __email__ = "connect@exonware.com"
 __company__ = "eXonware.com"
-
-# LAZY INSTALLATION - Simple One-Line Configuration
-# Auto-detects [lazy] extra and enables lazy installation hook
-from exonware.xwsystem.utils.lazy_discovery import config_package_lazy_install_enabled
-config_package_lazy_install_enabled("xwformats")  # Auto-detect [lazy] extra
-
 # Import all format serializers
 from .formats import *
-
 # Auto-register all serializers with UniversalCodecRegistry
 from exonware.xwsystem.io.codec.registry import get_registry
-
 _codec_registry = get_registry()
-
 # Get all serializer classes from formats
 from .formats.schema import (
-    XWProtobufSerializer, XWParquetSerializer, XWThriftSerializer,
-    XWOrcSerializer, XWCapnProtoSerializer, XWFlatBuffersSerializer,
+    ParquetSerializer, ThriftSerializer,
+    OrcSerializer, CapnProtoSerializer, FlatBuffersSerializer,
+    ArrowSerializer,
 )
+# Protobuf - conditional import (may have version compatibility issues)
+from .formats.schema import ProtobufSerializer  # May be None if not available
 # Note: Avro excluded due to cramjam bug on Python 3.12 Windows - see KNOWN_ISSUES.md
 from .formats.scientific import (
-    XWHdf5Serializer, XWFeatherSerializer, XWZarrSerializer,
-    XWNetcdfSerializer, XWMatSerializer,
+    Hdf5Serializer, FeatherSerializer, ZarrSerializer,
+    NetcdfSerializer, MatSerializer,
 )
 from .formats.database import (
-    XWLmdbSerializer, XWGraphDbSerializer, XWLeveldbSerializer,
+    LmdbSerializer, GraphDbSerializer, LeveldbSerializer,
 )
+# RocksDB - always available (has pure Python fallback if native library unavailable)
+from .formats.database import RocksdbSerializer
 from .formats.binary import (
-    XWUbjsonSerializer,
+    UbjsonSerializer,
+    BsonSerializer,
+    BincodeSerializer,
+    PostcardSerializer,
+    DillSerializer,
 )
-try:
-    from .formats.binary import XWBsonSerializer
-    BSON_AVAILABLE = True
-except ImportError:
-    BSON_AVAILABLE = False
-    XWBsonSerializer = None
-
-try:
-    from .formats.text import (
-        XWCsvSerializer,
-        XWYamlSerializer,
-        XWTomlSerializer,
-        XWXmlSerializer,
-    )
-    TEXT_FORMATS_AVAILABLE = True
-except ImportError:
-    TEXT_FORMATS_AVAILABLE = False
-    XWCsvSerializer = None
-    XWYamlSerializer = None
-    XWTomlSerializer = None
-    XWXmlSerializer = None
-
+from .formats.text import (
+    CsvSerializer,
+    YamlSerializer,
+    TomlSerializer,
+    XmlSerializer,
+    RonSerializer,
+)
 # Register all serializers
 _serializers_to_register = [
     # Schema formats (Avro excluded - see KNOWN_ISSUES.md)
-    XWProtobufSerializer, XWParquetSerializer, XWThriftSerializer,
-    XWOrcSerializer, XWCapnProtoSerializer, XWFlatBuffersSerializer,
+    ParquetSerializer, ThriftSerializer,
+    OrcSerializer, CapnProtoSerializer, FlatBuffersSerializer,
+    ArrowSerializer,
     # Scientific formats
-    XWHdf5Serializer, XWFeatherSerializer, XWZarrSerializer,
-    XWNetcdfSerializer, XWMatSerializer,
+    Hdf5Serializer, FeatherSerializer, ZarrSerializer,
+    NetcdfSerializer, MatSerializer,
     # Database formats
-    XWLmdbSerializer, XWGraphDbSerializer, XWLeveldbSerializer,
+    LmdbSerializer, GraphDbSerializer, LeveldbSerializer,
     # Binary formats
-    XWUbjsonSerializer,
+    UbjsonSerializer,
+    BsonSerializer,
+    BincodeSerializer,
+    PostcardSerializer,
+    DillSerializer,
+    # Text formats
+    CsvSerializer,
+    YamlSerializer,
+    TomlSerializer,
+    XmlSerializer,
+    RonSerializer,
 ]
-
-# Add text formats if available
-if TEXT_FORMATS_AVAILABLE:
-    if XWCsvSerializer:
-        _serializers_to_register.append(XWCsvSerializer)
-    if XWYamlSerializer:
-        _serializers_to_register.append(XWYamlSerializer)
-    if XWTomlSerializer:
-        _serializers_to_register.append(XWTomlSerializer)
-    if XWXmlSerializer:
-        _serializers_to_register.append(XWXmlSerializer)
-
-# Add BSON if available
-if BSON_AVAILABLE and XWBsonSerializer:
-    _serializers_to_register.append(XWBsonSerializer)
-
-# Add text formats if available
-if TEXT_FORMATS_AVAILABLE:
-    if XWCsvSerializer:
-        _serializers_to_register.append(XWCsvSerializer)
-    if XWYamlSerializer:
-        _serializers_to_register.append(XWYamlSerializer)
-    if XWTomlSerializer:
-        _serializers_to_register.append(XWTomlSerializer)
-    if XWXmlSerializer:
-        _serializers_to_register.append(XWXmlSerializer)
-
+# Add RocksdbSerializer (always available with pure Python fallback)
+_serializers_to_register.append(RocksdbSerializer)
+# Add ProtobufSerializer if available (may be None due to version issues)
+if ProtobufSerializer is not None:
+    _serializers_to_register.append(ProtobufSerializer)
 # Register all serializers
 for _serializer_class in _serializers_to_register:
-    if _serializer_class is not None:
-        try:
-            _codec_registry.register(_serializer_class)
-        except Exception:
-            # Skip registration if serializer has missing dependencies
-            pass
-
+    _codec_registry.register(_serializer_class)
+# Import facade for main public API
+from .facade import XWFormats
 __all__ = [
     # Version info
     '__version__',
     '__author__',
     '__email__',
     '__company__',
-    
+    # Main facade
+    'XWFormats',
     # All formats exported from formats module
     # (will be populated by formats/__init__.py)
 ]
-

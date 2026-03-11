@@ -2,20 +2,15 @@
 #exonware/xwformats/src/exonware/xwformats/formats/binary/__init__.py
 """Enterprise binary serialization formats."""
 
-from .ubjson import XWUbjsonSerializer, UbjsonSerializer
-
-try:
-    from .bson import XWBsonSerializer
-    BSON_AVAILABLE = True
-except ImportError:
-    BSON_AVAILABLE = False
-    XWBsonSerializer = None
-
+from .ubjson import UbjsonSerializer
+from .bson import BsonSerializer
+from .bincode import BincodeSerializer
+from .postcard import PostcardSerializer
+from .dill import DillSerializer
 __all__ = [
-    "XWUbjsonSerializer",
     "UbjsonSerializer",
+    "BsonSerializer",
+    "BincodeSerializer",
+    "PostcardSerializer",
+    "DillSerializer",
 ]
-
-if BSON_AVAILABLE:
-    __all__.append("XWBsonSerializer")
-
