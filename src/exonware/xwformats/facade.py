@@ -7,7 +7,7 @@ Public API per REF_15_API and REF_01_REQ sec. 6.
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.3
+Version: 0.9.0.4
 Generation Date: 07-Jan-2025
 """
 

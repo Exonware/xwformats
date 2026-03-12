@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.3
+Version: 0.9.0.4
 Generation Date: November 2, 2025
 Thrift serialization - Apache Thrift RPC framework.
 Following I→A→XW pattern:

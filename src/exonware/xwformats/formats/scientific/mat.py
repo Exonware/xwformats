@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.3
+Version: 0.9.0.4
 Generation Date: 02-Nov-2025
 MATLAB MAT File Serialization
 MAT files are MATLAB's binary data format for:

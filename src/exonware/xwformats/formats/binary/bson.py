@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.3
+Version: 0.9.0.4
 Generation Date: 15-Nov-2025
 BSON Serialization - Binary JSON
 BSON (Binary JSON) is MongoDB's binary format that:
