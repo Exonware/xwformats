@@ -5,7 +5,7 @@ Enterprise text serialization formats.
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.4
+Version: 0.9.0.5
 Generation Date: 15-Nov-2025
 Text formats: CSV, YAML, TOML, XML
 """
