@@ -11,7 +11,7 @@
 # =============================================================================
 # CORE DEPENDENCY
 # =============================================================================
-# Source size (src/*): ~202.2 KB
+# Source size (src/*): ~201.6 KB
 pip                     # Package installer (CI and lazy install)
 exonware-xwsystem       # Foundation library
 

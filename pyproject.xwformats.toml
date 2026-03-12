@@ -1,4 +1,4 @@
-# Source size (src/*): ~202.2 KB
+# Source size (src/*): ~201.6 KB
 [build-system]
 requires = [
     "hatchling",
@@ -36,4 +36,11 @@ full = [
     "exonware-xwformats[full]",
 ]
 
-[tool]
+[tool.hatch.version]
+path = "src/exonware/xwformats/version.py"
+
+[tool.hatch.build.targets.wheel]
+only-include = [
+    "README.md",
+    "src/xwformats_wrapper.py",
+]

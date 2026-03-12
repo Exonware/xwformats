@@ -1,6 +1,6 @@
 # project-src-size=207015 ; 0.20 MB
 
-# Source size (src/*): ~202.2 KB
+# Source size (src/*): ~201.6 KB
 [build-system]
   requires = ["hatchling"]
   build-backend = "hatchling.build"
@@ -106,3 +106,13 @@
 
 [tool]
   # Dependency sizes: run 'commands measure_dependency_sizes xwformats' to refresh # project-src-size and # file-size in this file.
+
+  [tool.hatch.version]
+    path = "src/exonware/xwformats/version.py"
+
+  [tool.hatch.build]
+
+    [tool.hatch.build.targets]
+
+      [tool.hatch.build.targets.wheel]
+        packages = ["src/exonware"]

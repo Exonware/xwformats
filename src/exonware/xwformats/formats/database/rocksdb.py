@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.1
+Version: 0.9.0.2
 Generation Date: 07-Jan-2025
 RocksDB Serialization - High-Performance Key-Value Store
 RocksDB is a persistent key-value store for fast storage based on a log-structured
