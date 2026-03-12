@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.2
+Version: 0.9.0.3
 Generation Date: 15-Nov-2025
 CSV Serialization - Comma-Separated Values
 CSV is a simple text format for tabular data:
