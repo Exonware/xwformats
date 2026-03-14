@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.5
+Version: 0.9.0.6
 Generation Date: November 2, 2025
 Parquet serialization - Apache Parquet columnar storage format.
 Following I→A→XW pattern:
@@ -12,7 +12,7 @@ Following I→A→XW pattern:
 """
 
 import io
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
@@ -90,7 +90,7 @@ class ParquetSerializer(ASerialization):
     # CORE ENCODE/DECODE (Using pyarrow)
     # ========================================================================
 
-    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> bytes | str:
+    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes | str:
         """
         Encode data to Parquet bytes.
         Uses pyarrow.parquet.
@@ -130,7 +130,7 @@ class ParquetSerializer(ASerialization):
                 original_error=e
             )
 
-    def decode(self, repr: bytes | str, *, options: Optional[DecodeOptions] = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
         """
         Decode Parquet bytes to data.
         Uses pyarrow.parquet.

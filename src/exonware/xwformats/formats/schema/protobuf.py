@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.5
+Version: 0.9.0.6
 Generation Date: November 2, 2025
 Protocol Buffers serialization - Google's data interchange format.
 Following I→A→XW pattern:
@@ -11,7 +11,7 @@ Following I→A→XW pattern:
 - XW: ProtobufSerializer (concrete implementation)
 """
 
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
@@ -99,7 +99,7 @@ class ProtobufSerializer(ASerialization):
     # CORE ENCODE/DECODE (Using google.protobuf)
     # ========================================================================
 
-    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> bytes | str:
+    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes | str:
         """
         Encode protobuf message to bytes.
         Args:
@@ -128,7 +128,7 @@ class ProtobufSerializer(ASerialization):
                 original_error=e
             )
 
-    def decode(self, repr: bytes | str, *, options: Optional[DecodeOptions] = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
         """
         Decode protobuf bytes to message.
         Args:

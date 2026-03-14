@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.5
+Version: 0.9.0.6
 Generation Date: 15-Nov-2025
 YAML Serialization - YAML Ain't Markup Language
 YAML is a human-readable data serialization format:
@@ -19,7 +19,7 @@ Priority 4 (Performance): Efficient YAML parsing
 Priority 5 (Extensibility): Support YAML 1.1 and 1.2
 """
 
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 import yaml
 from exonware.xwsystem.io.serialization.base import ASerialization
@@ -78,7 +78,7 @@ class YamlSerializer(ASerialization):
     def encode(
         self,
         data: Any,
-        options: Optional[EncodeOptions] = None
+        options: EncodeOptions | None = None
     ) -> bytes:
         """
         Encode data to YAML.
@@ -109,7 +109,7 @@ class YamlSerializer(ASerialization):
     def decode(
         self,
         data: bytes | bytearray | str,
-        options: Optional[DecodeOptions] = None
+        options: DecodeOptions | None = None
     ) -> Any:
         """
         Decode YAML data.
@@ -136,7 +136,7 @@ class YamlSerializer(ASerialization):
         self,
         data: Any,
         file_path: str | Path,
-        options: Optional[EncodeOptions] = None
+        options: EncodeOptions | None = None
     ) -> None:
         """
         Encode data to YAML file.
@@ -152,7 +152,7 @@ class YamlSerializer(ASerialization):
     def decode_from_file(
         self,
         file_path: str | Path,
-        options: Optional[DecodeOptions] = None
+        options: DecodeOptions | None = None
     ) -> Any:
         """
         Decode YAML from file.

@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.5
+Version: 0.9.0.6
 Generation Date: 07-Jan-2025
 Bincode Serialization - Rust's Native Binary Format
 Bincode is Rust's native binary serialization format that:
@@ -24,7 +24,7 @@ Priority 4 (Performance): Fast binary encoding/decoding
 Priority 5 (Extensibility): Support custom serializers and Rust interoperability
 """
 
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 import io
 import attrs2bin
@@ -232,7 +232,7 @@ class BincodeSerializer(ASerialization):
             setattr(instance, str(key), value)
         return instance
 
-    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> bytes:
+    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes:
         """
         Encode data to Bincode bytes.
         Uses attrs2bin for Rust bincode compatibility.
@@ -293,7 +293,7 @@ class BincodeSerializer(ASerialization):
                 original_error=e
             ) from e
 
-    def decode(self, repr: bytes | str, *, options: Optional[DecodeOptions] = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
         """
         Decode Bincode bytes to data.
         Uses attrs2bin for Rust bincode compatibility.

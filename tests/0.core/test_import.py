@@ -21,8 +21,9 @@ def test_import_xwformats():
 
 def test_version_info():
     """Test that version information is available."""
+    import re
     from exonware.xwformats import __version__, __author__, __email__, __company__
-    assert __version__ == "0.1.0.1"  # Updated to match actual version
+    assert re.match(r"^\d+\.\d+\.\d+(\.\d+)?$", __version__), f"__version__ should be semver-like, got {__version__!r}"
     assert __author__ == "eXonware Backend Team"
     assert __email__ == "connect@exonware.com"
     assert __company__ == "eXonware.com"

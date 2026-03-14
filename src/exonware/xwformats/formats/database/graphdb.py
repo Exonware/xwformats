@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.5
+Version: 0.9.0.6
 Generation Date: November 2, 2025
 GraphDB serialization - Graph database serialization.
 Following I→A→XW pattern:
@@ -11,7 +11,7 @@ Following I→A→XW pattern:
 - XW: GraphDbSerializer (concrete implementation)
 """
 
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
@@ -58,11 +58,11 @@ class GraphDbSerializer(ASerialization):
     def aliases(self) -> list[str]:
         return ["graphdb", "graph"]
 
-    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> bytes | str:
+    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes | str:
         """GraphDB encode requires database connection - use save_file() instead."""
         raise NotImplementedError("GraphDB requires database operations - use save_file()")
 
-    def decode(self, repr: bytes | str, *, options: Optional[DecodeOptions] = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
         """GraphDB decode requires database connection - use load_file() instead."""
         raise NotImplementedError("GraphDB requires database operations - use load_file()")
 GraphDbSerializer = GraphDbSerializer

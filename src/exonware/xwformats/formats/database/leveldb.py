@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.5
+Version: 0.9.0.6
 Generation Date: 02-Nov-2025
 LevelDB Serialization - Pure Python Key-Value Store (SQLite-based)
 LevelDB-compatible serializer using SQLite as the backend engine.
@@ -29,7 +29,7 @@ Priority 4 (Performance): Fast SQLite-backed operations with optimized indexes
 Priority 5 (Extensibility): Supports LevelDB-compatible options and extensions
 """
 
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 import pickle
 import sqlite3
@@ -108,7 +108,7 @@ class LeveldbSerializer(ASerialization):
         """LevelDB aliases."""
         return ["leveldb", "LevelDB", "ldb"]
 
-    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> bytes:
+    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes:
         """
         Encode data to LevelDB-compatible bytes.
         Note: LevelDB is designed for file-based operations. This method
@@ -130,7 +130,7 @@ class LeveldbSerializer(ASerialization):
         # For in-memory transport, pickle the dictionary
         return pickle.dumps(value)
 
-    def decode(self, repr: bytes | str, *, options: Optional[DecodeOptions] = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
         """
         Decode LevelDB bytes to Python data.
         Note: LevelDB is designed for file-based operations. This method

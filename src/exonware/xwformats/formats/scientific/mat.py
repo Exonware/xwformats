@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.5
+Version: 0.9.0.6
 Generation Date: 02-Nov-2025
 MATLAB MAT File Serialization
 MAT files are MATLAB's binary data format for:
@@ -19,7 +19,7 @@ Priority 4 (Performance): Efficient array storage
 Priority 5 (Extensibility): Compatible with MATLAB ecosystem
 """
 
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 import scipy.io
 from exonware.xwsystem.io.serialization.base import ASerialization
@@ -53,7 +53,7 @@ class MatSerializer(ASerialization):
         """Supported file extensions."""
         return [".mat"]
 
-    def encode(self, data: Any, options: Optional[dict[str, Any]] = None) -> bytes:
+    def encode(self, data: Any, options: dict[str, Any] | None = None) -> bytes:
         """
         Encode data to MAT bytes.
         Note: MAT files are best saved directly to disk.
@@ -76,7 +76,7 @@ class MatSerializer(ASerialization):
             "Use encode_to_file() or save to file directly."
         )
 
-    def decode(self, data: bytes, options: Optional[dict[str, Any]] = None) -> dict[str, Any]:
+    def decode(self, data: bytes, options: dict[str, Any] | None = None) -> dict[str, Any]:
         """
         Decode MAT bytes to Python data.
         Args:
@@ -90,7 +90,7 @@ class MatSerializer(ASerialization):
         buffer = io.BytesIO(data)
         return loadmat(buffer)
 
-    def encode_to_file(self, data: Any, file_path: str | Path, options: Optional[dict[str, Any]] = None) -> None:
+    def encode_to_file(self, data: Any, file_path: str | Path, options: dict[str, Any] | None = None) -> None:
         """
         Encode data to MAT file.
         Args:
@@ -108,7 +108,7 @@ class MatSerializer(ASerialization):
             do_compression=do_compression
         )
 
-    def decode_from_file(self, file_path: str | Path, options: Optional[dict[str, Any]] = None) -> dict[str, Any]:
+    def decode_from_file(self, file_path: str | Path, options: dict[str, Any] | None = None) -> dict[str, Any]:
         """
         Decode MAT file to Python dict.
         Args:

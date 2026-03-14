@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.5
+Version: 0.9.0.6
 Generation Date: 07-Jan-2025
 Apache Arrow serialization - Columnar in-memory format.
 Apache Arrow is a cross-language development platform for in-memory data.
@@ -22,7 +22,7 @@ Priority 5 (Extensibility): Support Arrow IPC, streaming, and batch operations
 """
 
 import io
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
@@ -110,7 +110,7 @@ class ArrowSerializer(ASerialization):
     # CORE ENCODE/DECODE (Using pyarrow)
     # ========================================================================
 
-    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> bytes:
+    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes:
         """
         Encode data to Arrow IPC format bytes.
         Uses pyarrow for Apache Arrow IPC serialization.
@@ -160,7 +160,7 @@ class ArrowSerializer(ASerialization):
                 original_error=e
             ) from e
 
-    def decode(self, repr: bytes | str, *, options: Optional[DecodeOptions] = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
         """
         Decode Arrow IPC bytes to data.
         Uses pyarrow for Apache Arrow IPC deserialization.

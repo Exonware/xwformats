@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.5
+Version: 0.9.0.6
 Generation Date: 15-Nov-2025
 XML Serialization - Extensible Markup Language
 XML is a markup language for structured data:
@@ -19,7 +19,7 @@ Priority 4 (Performance): Efficient XML parsing
 Priority 5 (Extensibility): Support XML namespaces and schemas
 """
 
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
@@ -79,7 +79,7 @@ class XmlSerializer(ASerialization):
     def encode(
         self,
         data: Any,
-        options: Optional[EncodeOptions] = None
+        options: EncodeOptions | None = None
     ) -> bytes:
         """
         Encode data to XML.
@@ -120,7 +120,7 @@ class XmlSerializer(ASerialization):
     def decode(
         self,
         data: bytes | bytearray | str,
-        options: Optional[DecodeOptions] = None
+        options: DecodeOptions | None = None
     ) -> Any:
         """
         Decode XML data.
@@ -199,7 +199,7 @@ class XmlSerializer(ASerialization):
         self,
         data: Any,
         file_path: str | Path,
-        options: Optional[EncodeOptions] = None
+        options: EncodeOptions | None = None
     ) -> None:
         """
         Encode data to XML file.
@@ -215,7 +215,7 @@ class XmlSerializer(ASerialization):
     def decode_from_file(
         self,
         file_path: str | Path,
-        options: Optional[DecodeOptions] = None
+        options: DecodeOptions | None = None
     ) -> Any:
         """
         Decode XML from file.

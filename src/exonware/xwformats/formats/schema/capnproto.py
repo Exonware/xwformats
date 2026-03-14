@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.5
+Version: 0.9.0.6
 Generation Date: November 2, 2025
 Cap'n Proto serialization - Fast data interchange format.
 Following I→A→XW pattern:
@@ -11,7 +11,7 @@ Following I→A→XW pattern:
 - XW: CapnProtoSerializer (concrete implementation)
 """
 
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
@@ -66,14 +66,14 @@ class CapnProtoSerializer(ASerialization):
     def aliases(self) -> list[str]:
         return ["capnproto", "capnp"]
 
-    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> bytes | str:
+    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes | str:
         """Encode Cap'n Proto message to bytes."""
         try:
             return value.to_bytes()
         except Exception as e:
             raise SerializationError(f"Failed to encode Cap'n Proto: {e}", self.format_name, e)
 
-    def decode(self, repr: bytes | str, *, options: Optional[DecodeOptions] = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
         """Decode Cap'n Proto bytes to message."""
         try:
             opts = options or {}

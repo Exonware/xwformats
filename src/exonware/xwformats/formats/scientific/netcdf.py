@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.5
+Version: 0.9.0.6
 Generation Date: 02-Nov-2025
 NetCDF Serialization - Network Common Data Form
 NetCDF is a format for:
@@ -19,7 +19,7 @@ Priority 4 (Performance): Efficient array storage
 Priority 5 (Extensibility): CF conventions support
 """
 
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 import netCDF4
 import numpy as np
@@ -55,7 +55,7 @@ class NetcdfSerializer(ASerialization):
         """Supported file extensions."""
         return [".nc", ".nc4", ".netcdf"]
 
-    def encode(self, data: Any, options: Optional[dict[str, Any]] = None) -> bytes:
+    def encode(self, data: Any, options: dict[str, Any] | None = None) -> bytes:
         """
         Encode data to NetCDF bytes.
         Args:
@@ -71,7 +71,7 @@ class NetcdfSerializer(ASerialization):
             "Use encode_to_file() or save to file directly."
         )
 
-    def decode(self, data: bytes, options: Optional[dict[str, Any]] = None) -> Any:
+    def decode(self, data: bytes, options: dict[str, Any] | None = None) -> Any:
         """
         Decode NetCDF bytes to Python data.
         Args:
@@ -87,7 +87,7 @@ class NetcdfSerializer(ASerialization):
             "Use decode_from_file() or load from file directly."
         )
 
-    def encode_to_file(self, data: Any, file_path: str | Path, options: Optional[dict[str, Any]] = None) -> None:
+    def encode_to_file(self, data: Any, file_path: str | Path, options: dict[str, Any] | None = None) -> None:
         """
         Encode data to NetCDF file.
         Args:
@@ -120,7 +120,7 @@ class NetcdfSerializer(ASerialization):
                 for attr_name, attr_value in data['attributes'].items():
                     setattr(nc, attr_name, attr_value)
 
-    def decode_from_file(self, file_path: str | Path, options: Optional[dict[str, Any]] = None) -> dict[str, Any]:
+    def decode_from_file(self, file_path: str | Path, options: dict[str, Any] | None = None) -> dict[str, Any]:
         """
         Decode NetCDF file to Python dict.
         Args:

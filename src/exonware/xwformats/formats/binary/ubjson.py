@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.5
+Version: 0.9.0.6
 Generation Date: 02-Nov-2025
 UBJSON Serialization - Universal Binary JSON
 UBJSON is a binary JSON format that:
@@ -19,7 +19,7 @@ Priority 4 (Performance): Fast binary encoding/decoding
 Priority 5 (Extensibility): Compatible with JSON ecosystem
 """
 
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 import ubjson
 from exonware.xwsystem.io.serialization.base import ASerialization
@@ -63,7 +63,7 @@ class UbjsonSerializer(ASerialization):
         """UBJSON is a binary serialization format."""
         return ["binary", "serialization"]
 
-    def encode(self, data: Any, options: Optional[dict[str, Any]] = None) -> bytes:
+    def encode(self, data: Any, options: dict[str, Any] | None = None) -> bytes:
         """
         Encode data to UBJSON bytes.
         Args:
@@ -74,7 +74,7 @@ class UbjsonSerializer(ASerialization):
         """
         return ubjson.dumpb(data)
 
-    def decode(self, data: bytes, options: Optional[dict[str, Any]] = None) -> Any:
+    def decode(self, data: bytes, options: dict[str, Any] | None = None) -> Any:
         """
         Decode UBJSON bytes to Python data.
         Args:

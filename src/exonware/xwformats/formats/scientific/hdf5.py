@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.5
+Version: 0.9.0.6
 Generation Date: November 2, 2025
 HDF5 serialization - Hierarchical Data Format.
 Following I→A→XW pattern:
@@ -12,7 +12,7 @@ Following I→A→XW pattern:
 """
 
 import io
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
@@ -67,11 +67,11 @@ class Hdf5Serializer(ASerialization):
     def aliases(self) -> list[str]:
         return ["hdf5", "HDF5", "h5"]
 
-    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> bytes | str:
+    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes | str:
         """Encode data to HDF5 bytes (requires file path in options)."""
         raise NotImplementedError("HDF5 encode to memory not supported - use save_file() instead")
 
-    def decode(self, repr: bytes | str, *, options: Optional[DecodeOptions] = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
         """Decode HDF5 bytes to data (requires file path in options)."""
         raise NotImplementedError("HDF5 decode from memory not supported - use load_file() instead")
 Hdf5Serializer = Hdf5Serializer
