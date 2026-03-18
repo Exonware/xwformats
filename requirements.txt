@@ -11,7 +11,7 @@
 # =============================================================================
 # CORE DEPENDENCY
 # =============================================================================
-# Source size (src/*): ~190.3 KB
+# Source size (src/*): ~191.0 KB
 exonware-xwsystem>=0.0.1       # Foundation library
 
 # =============================================================================
@@ -65,3 +65,22 @@ py-ubjson>=0.16.0               # UBJSON (~50 KB)
 # LAZY: pip install exonware-xwformats[lazy] (auto-install on demand)
 # FULL: pip install exonware-xwformats[full] (all formats pre-installed)
 
+google
+cloudpickle
+pytz
+numexpr
+bottleneck
+attrs2bin
+dill
+pypostcard
+pcodec
+fsspec
+isal
+python-snappy
+lz4
+cython
+charset-normalizer
+threadpoolctl
+ron
+tomli
+substrait

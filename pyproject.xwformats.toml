@@ -1,4 +1,4 @@
-# Source size (src/*): ~190.3 KB
+# Source size (src/*): ~191.0 KB
 [build-system]
 requires = [
     "hatchling",
@@ -13,40 +13,14 @@ dynamic = [
 description = "Convenience wrapper for exonware-xwformats - provides 'import xwformats' alias"
 readme = "README.md"
 requires-python = ">=3.12"
-keywords = [
-    "serialization",
-    "parquet",
-    "avro",
-    "hdf5",
-    "netcdf",
-    "protobuf",
-    "thrift",
-    "scientific",
-    "enterprise",
-    "formats",
-    "exonware",
-]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Scientific/Engineering",
-]
+keywords = []
+classifiers = []
 dependencies = [
     "exonware-xwformats",
 ]
-authors = [
-    { name = "eXonware Backend Team", email = "connect@exonware.com" },
-]
+exonware-xwsystem = "2758230 ; 2.63 MB"
+authors = []
+"{ name" = "eXonware Backend Team"
 
 [project.license]
 text = "MIT"
@@ -55,14 +29,213 @@ text = "MIT"
 lazy = [
     "exonware-xwformats[lazy]",
 ]
+exonware-xwlazy = [
+    "exonware-xwformats[exonware-xwlazy]",
+]
+"exonware-xwsystem[lazy]" = [
+    "exonware-xwformats[exonware-xwsystem[lazy]]",
+]
+dev = [
+    "exonware-xwformats[dev]",
+]
+"black>" = [
+    "exonware-xwformats[black>]",
+]
+"exonware-xwsystem[dev]" = [
+    "exonware-xwformats[exonware-xwsystem[dev]]",
+]
+"isort>" = [
+    "exonware-xwformats[isort>]",
+]
+"mypy>" = [
+    "exonware-xwformats[mypy>]",
+]
+"pytest>" = [
+    "exonware-xwformats[pytest>]",
+]
+"pytest-asyncio>" = [
+    "exonware-xwformats[pytest-asyncio>]",
+]
+"pytest-cov>" = [
+    "exonware-xwformats[pytest-cov>]",
+]
 full = [
     "exonware-xwformats[full]",
 ]
-
-[project.urls]
-Homepage = "https://exonware.com"
-Repository = "https://github.com/exonware/xwformats"
-Documentation = "https://github.com/exonware/xwformats#readme"
+aiofiles = [
+    "exonware-xwformats[aiofiles]",
+]
+attrs = [
+    "exonware-xwformats[attrs]",
+]
+"attrs2bin>" = [
+    "exonware-xwformats[attrs2bin>]",
+]
+bcrypt = [
+    "exonware-xwformats[bcrypt]",
+]
+bottleneck = [
+    "exonware-xwformats[bottleneck]",
+]
+brotli = [
+    "exonware-xwformats[brotli]",
+]
+cachebox = [
+    "exonware-xwformats[cachebox]",
+]
+cachetools = [
+    "exonware-xwformats[cachetools]",
+]
+cbor2 = [
+    "exonware-xwformats[cbor2]",
+]
+charset-normalizer = [
+    "exonware-xwformats[charset-normalizer]",
+]
+cloudpickle = [
+    "exonware-xwformats[cloudpickle]",
+]
+cramjam = [
+    "exonware-xwformats[cramjam]",
+]
+cryptography = [
+    "exonware-xwformats[cryptography]",
+]
+cython = [
+    "exonware-xwformats[cython]",
+]
+dicttoxml = [
+    "exonware-xwformats[dicttoxml]",
+]
+"dill>" = [
+    "exonware-xwformats[dill>]",
+]
+"exonware-xwsystem[full]" = [
+    "exonware-xwformats[exonware-xwsystem[full]]",
+]
+"fastavro>" = [
+    "exonware-xwformats[fastavro>]",
+]
+"flatbuffers>" = [
+    "exonware-xwformats[flatbuffers>]",
+]
+fsspec = [
+    "exonware-xwformats[fsspec]",
+]
+google = [
+    "exonware-xwformats[google]",
+]
+"h5py>" = [
+    "exonware-xwformats[h5py>]",
+]
+httpx = [
+    "exonware-xwformats[httpx]",
+]
+hyperlight_hyperjson = [
+    "exonware-xwformats[hyperlight_hyperjson]",
+]
+isal = [
+    "exonware-xwformats[isal]",
+]
+json5 = [
+    "exonware-xwformats[json5]",
+]
+"lmdb>" = [
+    "exonware-xwformats[lmdb>]",
+]
+lz4 = [
+    "exonware-xwformats[lz4]",
+]
+msgpack = [
+    "exonware-xwformats[msgpack]",
+]
+msgspec = [
+    "exonware-xwformats[msgspec]",
+]
+"netCDF4>" = [
+    "exonware-xwformats[netCDF4>]",
+]
+numexpr = [
+    "exonware-xwformats[numexpr]",
+]
+"numpy>" = [
+    "exonware-xwformats[numpy>]",
+]
+opentelemetry-api = [
+    "exonware-xwformats[opentelemetry-api]",
+]
+orjson = [
+    "exonware-xwformats[orjson]",
+]
+"pandas>" = [
+    "exonware-xwformats[pandas>]",
+]
+pcodec = [
+    "exonware-xwformats[pcodec]",
+]
+psutil = [
+    "exonware-xwformats[psutil]",
+]
+"py-ubjson>" = [
+    "exonware-xwformats[py-ubjson>]",
+]
+"pyarrow>" = [
+    "exonware-xwformats[pyarrow>]",
+]
+"pycapnp>" = [
+    "exonware-xwformats[pycapnp>]",
+]
+pylru = [
+    "exonware-xwformats[pylru]",
+]
+pymongo = [
+    "exonware-xwformats[pymongo]",
+]
+"pyorc>" = [
+    "exonware-xwformats[pyorc>]",
+]
+"pypostcard>" = [
+    "exonware-xwformats[pypostcard>]",
+]
+python-snappy = [
+    "exonware-xwformats[python-snappy]",
+]
+pytz = [
+    "exonware-xwformats[pytz]",
+]
+PyYAML = [
+    "exonware-xwformats[PyYAML]",
+]
+rich = [
+    "exonware-xwformats[rich]",
+]
+"scipy>" = [
+    "exonware-xwformats[scipy>]",
+]
+substrait = [
+    "exonware-xwformats[substrait]",
+]
+threadpoolctl = [
+    "exonware-xwformats[threadpoolctl]",
+]
+"thrift>" = [
+    "exonware-xwformats[thrift>]",
+]
+tomli = [
+    "exonware-xwformats[tomli]",
+]
+tomli-w = [
+    "exonware-xwformats[tomli-w]",
+]
+xmltodict = [
+    "exonware-xwformats[xmltodict]",
+]
+"zarr>" = [
+    "exonware-xwformats[zarr>]",
+]
+zstandard = [
+    "exonware-xwformats[zstandard]",
+]
 
 [tool.hatch.version]
 path = "src/exonware/xwformats/version.py"

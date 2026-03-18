@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.8
+Version: 0.9.0.9
 Generation Date: November 2, 2025
 
 Protocol Buffers serialization - Google's data interchange format.
@@ -20,7 +20,15 @@ from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
 from exonware.xwsystem.io.defs import CodecCapability
 from exonware.xwsystem.io.errors import SerializationError
-from google.protobuf import message, json_format
+
+# Optional dependency; import failures should not break module import.
+try:
+    from google.protobuf import message, json_format
+    PROTOBUF_AVAILABLE = True
+except (ImportError, AttributeError, ModuleNotFoundError, Exception):
+    PROTOBUF_AVAILABLE = False
+    message = None
+    json_format = None
 
 
 class XWProtobufSerializer(ASerialization):
@@ -110,6 +118,12 @@ class XWProtobufSerializer(ASerialization):
         Raises:
             SerializationError: If encoding fails
         """
+        if not PROTOBUF_AVAILABLE or message is None:
+            raise SerializationError(
+                "Protobuf library not available. Install with: pip install protobuf",
+                format_name=self.format_name
+            )
+
         try:
             if not isinstance(value, message.Message):
                 raise TypeError("Value must be a protobuf Message instance")
@@ -140,6 +154,12 @@ class XWProtobufSerializer(ASerialization):
         Raises:
             SerializationError: If decoding fails
         """
+        if not PROTOBUF_AVAILABLE or message is None:
+            raise SerializationError(
+                "Protobuf library not available. Install with: pip install protobuf",
+                format_name=self.format_name
+            )
+
         try:
             opts = options or {}
             
