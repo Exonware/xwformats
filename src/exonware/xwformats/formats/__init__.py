@@ -6,7 +6,7 @@ Enterprise serialization formats.
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.0.1.7
+Version: 0.9.0.8
 Generation Date: 02-Nov-2025
 """
 
