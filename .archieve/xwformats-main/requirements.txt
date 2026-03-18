@@ -1,0 +1,120 @@
+# xwformats Requirements - Enterprise Serialization Formats
+# Company: eXonware.com
+# Author: eXonware Backend Team
+# Email: connect@exonware.com
+# Version: 0.1.0.1
+# Generation Date: 02-Nov-2025
+#
+# This file contains all dependencies for xwformats' 21 enterprise formats
+# Compatible with Python 3.8+
+
+# =============================================================================
+# CORE DEPENDENCY
+# =============================================================================
+# Source size (src/*): ~201.0 KB
+pip                     # Package installer (CI and lazy install)
+exonware-xwsystem       # Foundation library
+
+# =============================================================================
+# SCHEMA FORMATS (8 formats)
+# =============================================================================
+fastavro>=1.4.0                 # Apache Avro (~400 KB)
+protobuf>=3.19.0                # Protocol Buffers (~1 MB)
+thrift>=0.15.0                  # Apache Thrift (~1.5 MB)
+pyarrow>=8.0.0                  # Apache Parquet + Feather + Arrow (~15 MB)
+pandas>=1.3.0                   # Required by Parquet (~15 MB)
+pyorc>=0.6.0                    # Apache ORC (~500 KB)
+pycapnp>=1.1.0                  # Cap'n Proto (~2 MB) - May require C++ build tools
+flatbuffers>=2.0.0              # FlatBuffers (~200 KB)
+# Note: Apache Arrow uses pyarrow (same as Parquet/Feather)
+
+# =============================================================================
+# SCIENTIFIC FORMATS (5 formats)
+# =============================================================================
+h5py>=3.8.0                     # HDF5 (~3 MB)
+zarr>=2.15.0                    # Zarr (~500 KB)
+netCDF4>=1.6.0                  # NetCDF (~2 MB)
+scipy>=1.7.0                    # MATLAB MAT files (~38 MB)
+numpy>=1.20.0                   # Required by scientific formats (~5 MB)
+
+# =============================================================================
+# DATABASE FORMATS (4 formats)
+# =============================================================================
+lmdb>=1.4.0                     # LMDB (~300 KB)
+neo4j>=4.4.0                    # Neo4j GraphDB (~3 MB)
+pydgraph>=21.3.0                # Dgraph GraphDB (~2.5 MB)
+python-rocksdb>=0.7.0           # RocksDB (~5 MB) - May require C++ build tools
+# LevelDB uses SQLite (built into Python) - no external dependencies required
+
+# =============================================================================
+# BINARY FORMATS (5 formats)
+# =============================================================================
+py-ubjson>=0.16.0               # UBJSON (~50 KB)
+attrs2bin>=0.0.1                # Bincode - Rust binary format (~50 KB)
+pypostcard>=0.1.0               # Postcard - Rust embedded binary (~200 KB)
+dill>=0.3.0                     # Dill - Extended pickle (~300 KB)
+# Note: pymongo is provided by exonware-xwsystem[full] (for BSON)
+
+# =============================================================================
+# TEXT FORMATS (5 formats)
+# =============================================================================
+# Note: RON (python-ron) is not available on PyPI - implementation exists but requires manual installation
+# Note: pyyaml, tomli, tomli-w are provided by exonware-xwsystem[full]
+# Note: CSV and XML use built-in Python modules (csv, xml.etree.ElementTree)
+
+# =============================================================================
+# COMPATIBILITY NOTES
+# =============================================================================
+#
+# Total Size: ~98 MB
+# Total Formats: 27 enterprise formats (was 23, added Arrow, RocksDB, Bincode, RON, Postcard, Dill)
+#
+# Special Requirements:
+# - pycapnp: May require C++ build tools
+# - LevelDB: Uses SQLite (built into Python) - works everywhere, no build tools needed
+#
+# Installation Modes:
+# LITE: pip install exonware-xwformats (core only)
+# FULL: pip install exonware-xwformats[full] (all formats pre-installed)
+
+aiofiles
+cryptography
+bcrypt
+psutil
+opentelemetry-api
+cachebox
+cachetools
+pylru
+msgspec
+orjson
+hyperlight_hyperjson
+json5
+PyYAML
+tomli-w
+xmltodict
+dicttoxml
+msgpack
+cbor2
+pymongo
+httpx
+brotli
+zstandard
+rich
+attrs
+google
+cloudpickle
+cramjam
+lz4
+pytz
+numexpr
+bottleneck
+tomli
+ron
+pcodec
+cython
+charset-normalizer
+fsspec
+threadpoolctl
+isal
+substrait
+python-snappy

@@ -1,5 +1,5 @@
 <!-- docs/GUIDE_01_USAGE.md (project usage, GUIDE_41_DOCS) -->
-# xwformats - Usage Guide
+# xwformats — Usage Guide
 
 **Last Updated:** 08-Feb-2026  
 **Requirements source:** [REF_01_REQ.md](REF_01_REQ.md)

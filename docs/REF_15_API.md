@@ -1,5 +1,5 @@
 <!-- docs/REF_15_API.md (output of GUIDE_15_API) -->
-# xwformats - API Reference
+# xwformats — API Reference
 
 **Last Updated:** 08-Feb-2026  
 **Requirements source:** [REF_01_REQ.md](REF_01_REQ.md) sec. 6

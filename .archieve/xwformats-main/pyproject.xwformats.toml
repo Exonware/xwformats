@@ -1,0 +1,46 @@
+# Source size (src/*): ~201.0 KB
+[build-system]
+requires = [
+    "hatchling",
+]
+build-backend = "hatchling.build"
+
+[project]
+name = "xwformats"
+dynamic = [
+    "version",
+]
+description = "Convenience wrapper for exonware-xwformats - provides 'import xwformats' alias"
+readme = "README.md"
+requires-python = ">=3.12"
+keywords = []
+classifiers = []
+dependencies = [
+    "exonware-xwformats",
+]
+authors = [
+    { name = "eXonware Backend Team", email = "connect@exonware.com" },
+]
+
+[project.license]
+text = "MIT"
+
+[project.optional-dependencies]
+lazy = [
+    "exonware-xwformats[lazy]",
+]
+dev = [
+    "exonware-xwformats[dev]",
+]
+full = [
+    "exonware-xwformats[full]",
+]
+
+[tool.hatch.version]
+path = "src/exonware/xwformats/version.py"
+
+[tool.hatch.build.targets.wheel]
+only-include = [
+    "README.md",
+    "src/xwformats_wrapper.py",
+]

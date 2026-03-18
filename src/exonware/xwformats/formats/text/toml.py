@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.6
+Version: 0.0.1.3
 Generation Date: 15-Nov-2025
 TOML Serialization - Tom's Obvious Minimal Language
 TOML is a configuration file format:
@@ -19,7 +19,7 @@ Priority 4 (Performance): Efficient TOML parsing
 Priority 5 (Extensibility): Support TOML v1.0.0
 """
 
-from typing import Any
+from typing import Any, Optional
 from pathlib import Path
 import tomli
 import tomli_w
@@ -79,7 +79,7 @@ class TomlSerializer(ASerialization):
     def encode(
         self,
         data: Any,
-        options: EncodeOptions | None = None
+        options: Optional[EncodeOptions] = None
     ) -> bytes:
         """
         Encode data to TOML.
@@ -103,7 +103,7 @@ class TomlSerializer(ASerialization):
     def decode(
         self,
         data: bytes | bytearray | str,
-        options: DecodeOptions | None = None
+        options: Optional[DecodeOptions] = None
     ) -> Any:
         """
         Decode TOML data.
@@ -129,7 +129,7 @@ class TomlSerializer(ASerialization):
         self,
         data: Any,
         file_path: str | Path,
-        options: EncodeOptions | None = None
+        options: Optional[EncodeOptions] = None
     ) -> None:
         """
         Encode data to TOML file.
@@ -145,7 +145,7 @@ class TomlSerializer(ASerialization):
     def decode_from_file(
         self,
         file_path: str | Path,
-        options: DecodeOptions | None = None
+        options: Optional[DecodeOptions] = None
     ) -> Any:
         """
         Decode TOML from file.

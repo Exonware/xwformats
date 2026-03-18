@@ -5,12 +5,12 @@ Abstract base classes for xwformats.
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.6
+Version: 0.0.1.3
 Generation Date: 07-Jan-2025
 """
 
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Optional
 from .contracts import IFormatSerializer, IFormatConverter, IFormatRegistry
 
 
@@ -36,12 +36,12 @@ class AFormatSerializer(IFormatSerializer, ABC):
         pass
     @abstractmethod
 
-    def encode(self, data: Any, options: dict[str, Any] | None = None) -> bytes:
+    def encode(self, data: Any, options: Optional[dict[str, Any]] = None) -> bytes:
         """Encode data to format."""
         pass
     @abstractmethod
 
-    def decode(self, data: bytes, options: dict[str, Any] | None = None) -> Any:
+    def decode(self, data: bytes, options: Optional[dict[str, Any]] = None) -> Any:
         """Decode data from format."""
         pass
 
@@ -55,7 +55,7 @@ class AFormatConverter(IFormatConverter, ABC):
         data: Any,
         from_format: str,
         to_format: str,
-        options: dict[str, Any] | None = None
+        options: Optional[dict[str, Any]] = None
     ) -> Any:
         """Convert data between formats."""
         pass
@@ -70,7 +70,7 @@ class AFormatRegistry(IFormatRegistry, ABC):
         pass
     @abstractmethod
 
-    def get(self, format_name: str) -> IFormatSerializer | None:
+    def get(self, format_name: str) -> Optional[IFormatSerializer]:
         """Get serializer by format name."""
         pass
     @abstractmethod

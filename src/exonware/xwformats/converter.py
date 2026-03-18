@@ -6,7 +6,7 @@ Optimized format conversion with caching and direct conversions where possible.
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.6
+Version: 0.0.1.3
 Generation Date: 15-Nov-2025
 Priority 1 (Security): Safe format conversion
 Priority 2 (Usability): Simple conversion API
@@ -15,7 +15,7 @@ Priority 4 (Performance): Optimized conversions with caching
 Priority 5 (Extensibility): Easy to add new conversion paths
 """
 
-from typing import Any
+from typing import Any, Optional
 from pathlib import Path
 from exonware.xwsystem.io.codec.registry import get_registry
 from exonware.xwsystem.io.errors import SerializationError
@@ -40,7 +40,7 @@ class FormatConverter:
         data: bytes | Any,
         from_format: str,
         to_format: str,
-        options: dict | None = None
+        options: Optional[dict] = None
     ) -> bytes | Any:
         """
         Convert data from one format to another.
@@ -95,9 +95,9 @@ class FormatConverter:
         self,
         input_path: str | Path,
         output_path: str | Path,
-        from_format: str | None = None,
-        to_format: str | None = None,
-        options: dict | None = None
+        from_format: Optional[str] = None,
+        to_format: Optional[str] = None,
+        options: Optional[dict] = None
     ) -> None:
         """
         Convert file from one format to another.
@@ -143,7 +143,7 @@ class FormatConverter:
         data: bytes | Any,
         from_format: str,
         to_format: str,
-        options: dict | None = None
+        options: Optional[dict] = None
     ) -> bytes | Any:
         """Perform direct conversion (optimized path)."""
         from_serializer = self._registry.get_by_id(from_format)

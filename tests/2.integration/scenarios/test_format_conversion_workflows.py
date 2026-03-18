@@ -62,14 +62,11 @@ class TestFormatConversionWorkflows:
 
     def test_schema_format_conversion_workflow(self, tmp_path):
         """Test converting between text formats (simulating schema format workflow)."""
-        # Use a dict wrapping the list so TOML (top-level table only) can represent it
-        data = {
-            "rows": [
-                {"name": "Alice", "age": 30, "city": "New York"},
-                {"name": "Bob", "age": 25, "city": "London"},
-                {"name": "Charlie", "age": 35, "city": "Tokyo"},
-            ]
-        }
+        data = [
+            {"name": "Alice", "age": 30, "city": "New York"},
+            {"name": "Bob", "age": 25, "city": "London"},
+            {"name": "Charlie", "age": 35, "city": "Tokyo"},
+        ]
         registry = get_registry()
         # Convert: JSON → YAML → TOML → JSON (using available formats)
         json_serializer = registry.get_by_id("json")
@@ -94,9 +91,8 @@ class TestFormatConversionWorkflows:
         json_serializer.save_file(loaded, final_json_file)
         # Verify data integrity
         final_data = json_serializer.load_file(final_json_file)
-        assert "rows" in final_data
-        assert len(final_data["rows"]) == len(data["rows"])
-        assert final_data["rows"][0]["name"] == "Alice"
+        assert len(final_data) == len(data)
+        assert final_data[0]["name"] == "Alice"
 
     def test_database_format_workflow(self, tmp_path):
         """Test workflow using available formats (simulating database workflow)."""

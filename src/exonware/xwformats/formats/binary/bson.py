@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.6
+Version: 0.0.1.3
 Generation Date: 15-Nov-2025
 BSON Serialization - Binary JSON
 BSON (Binary JSON) is MongoDB's binary format that:
@@ -19,7 +19,7 @@ Priority 4 (Performance): Fast binary encoding/decoding
 Priority 5 (Extensibility): Compatible with MongoDB ecosystem
 """
 
-from typing import Any
+from typing import Any, Optional
 from pathlib import Path
 import bson
 from exonware.xwsystem.io.serialization.base import ASerialization
@@ -78,7 +78,7 @@ class BsonSerializer(ASerialization):
     def encode(
         self,
         data: Any,
-        options: EncodeOptions | None = None
+        options: Optional[EncodeOptions] = None
     ) -> bytes:
         """
         Encode data to BSON.
@@ -98,7 +98,7 @@ class BsonSerializer(ASerialization):
     def decode(
         self,
         data: bytes | bytearray,
-        options: DecodeOptions | None = None
+        options: Optional[DecodeOptions] = None
     ) -> Any:
         """
         Decode BSON data.
@@ -119,7 +119,7 @@ class BsonSerializer(ASerialization):
         self,
         data: Any,
         file_path: str | Path,
-        options: EncodeOptions | None = None
+        options: Optional[EncodeOptions] = None
     ) -> None:
         """
         Encode data to BSON file.
@@ -135,7 +135,7 @@ class BsonSerializer(ASerialization):
     def decode_from_file(
         self,
         file_path: str | Path,
-        options: DecodeOptions | None = None
+        options: Optional[DecodeOptions] = None
     ) -> Any:
         """
         Decode BSON from file.

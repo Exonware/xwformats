@@ -7,11 +7,11 @@ Public API per REF_15_API and REF_01_REQ sec. 6.
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.6
+Version: 0.0.1.3
 Generation Date: 07-Jan-2025
 """
 
-from typing import Any
+from typing import Any, Optional
 from .converter import FormatConverter
 from .config import XWFormatsConfig
 from .defs import ConversionMode
@@ -55,7 +55,7 @@ class XWFormats:
         data: Any,
         from_format: str,
         to_format: str,
-        options: dict[str, Any] | None = None
+        options: Optional[dict[str, Any]] = None
     ) -> Any:
         """
         Convert data between formats.

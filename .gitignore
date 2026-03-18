@@ -1,7 +1,3 @@
-# Migration/legacy directories (may contain paths too long for Windows)
-MIGRAT/
-MIGRATE/
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -60,8 +56,4 @@ Thumbs.db
 
 # Test output
 **/runner_out.md
-
-# Local secrets and archives
-.secrets
-.archieve/
 

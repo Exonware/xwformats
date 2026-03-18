@@ -1,4 +1,4 @@
-# Source size (src/*): ~201.0 KB
+# Source size (src/*): ~189.9 KB
 [build-system]
 requires = [
     "hatchling",
@@ -13,8 +13,34 @@ dynamic = [
 description = "Convenience wrapper for exonware-xwformats - provides 'import xwformats' alias"
 readme = "README.md"
 requires-python = ">=3.12"
-keywords = []
-classifiers = []
+keywords = [
+    "serialization",
+    "parquet",
+    "avro",
+    "hdf5",
+    "netcdf",
+    "protobuf",
+    "thrift",
+    "scientific",
+    "enterprise",
+    "formats",
+    "exonware",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering",
+]
 dependencies = [
     "exonware-xwformats",
 ]
@@ -29,12 +55,14 @@ text = "MIT"
 lazy = [
     "exonware-xwformats[lazy]",
 ]
-dev = [
-    "exonware-xwformats[dev]",
-]
 full = [
     "exonware-xwformats[full]",
 ]
+
+[project.urls]
+Homepage = "https://exonware.com"
+Repository = "https://github.com/exonware/xwformats"
+Documentation = "https://github.com/exonware/xwformats#readme"
 
 [tool.hatch.version]
 path = "src/exonware/xwformats/version.py"
@@ -43,4 +71,12 @@ path = "src/exonware/xwformats/version.py"
 only-include = [
     "README.md",
     "src/xwformats_wrapper.py",
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/tests",
+    "/README.md",
+    "/.github",
 ]

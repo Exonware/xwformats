@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.6
+Version: 0.0.1.3
 Generation Date: 07-Jan-2025
 Dill Serialization - Extended Pickle for Complex Python Objects
 Dill extends Python's pickle to serialize complex objects:
@@ -25,7 +25,7 @@ Priority 4 (Performance): Efficient serialization of complex objects
 Priority 5 (Extensibility): Support functions, lambdas, sessions, and more
 """
 
-from typing import Any
+from typing import Any, Optional
 from pathlib import Path
 import io
 import dill
@@ -109,7 +109,7 @@ class DillSerializer(ASerialization):
         """Dill is an extended binary serialization format for Python objects."""
         return ["binary", "serialization", "python", "extended"]
 
-    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes:
+    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> bytes:
         """
         Encode data to Dill bytes.
         Uses dill library for extended Python object serialization.
@@ -141,7 +141,7 @@ class DillSerializer(ASerialization):
                 original_error=e
             ) from e
 
-    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: Optional[DecodeOptions] = None) -> Any:
         """
         Decode Dill bytes to data.
         Uses dill library for extended Python object deserialization.

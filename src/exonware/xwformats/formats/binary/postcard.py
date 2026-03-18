@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.6
+Version: 0.0.1.3
 Generation Date: 07-Jan-2025
 Postcard Serialization - Compact Binary Format for Embedded Systems
 Postcard is a compact binary serialization format designed for embedded systems:
@@ -25,7 +25,7 @@ Priority 4 (Performance): Very fast and compact encoding/decoding
 Priority 5 (Extensibility): Support embedded systems and IoT use cases
 """
 
-from typing import Any
+from typing import Any, Optional
 from pathlib import Path
 from dataclasses import dataclass
 from pypostcard.serde import to_postcard, from_postcard
@@ -111,7 +111,7 @@ class PostcardSerializer(ASerialization):
         """Postcard is a compact binary serialization format for embedded systems."""
         return ["binary", "serialization", "rust", "embedded"]
 
-    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes:
+    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> bytes:
         """
         Encode data to Postcard bytes.
         Uses pypostcard for compact binary serialization.
@@ -148,7 +148,7 @@ class PostcardSerializer(ASerialization):
                 original_error=e
             ) from e
 
-    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: Optional[DecodeOptions] = None) -> Any:
         """
         Decode Postcard bytes to data.
         Uses pypostcard for compact binary deserialization.

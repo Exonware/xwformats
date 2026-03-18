@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.6
+Version: 0.0.1.3
 Generation Date: 07-Jan-2025
 RocksDB Serialization - High-Performance Key-Value Store
 RocksDB is a persistent key-value store for fast storage based on a log-structured
@@ -21,7 +21,7 @@ Priority 4 (Performance): Fast LSM-tree operations with optimized settings
 Priority 5 (Extensibility): Supports RocksDB options and advanced features
 """
 
-from typing import Any
+from typing import Any, Optional
 from pathlib import Path
 import pickle
 import threading
@@ -103,7 +103,7 @@ if not _ROCKSDB_AVAILABLE:
                         self._data = {k: bytes.fromhex(v) for k, v in data_dict.items()}
                     # Load key type information if available
                     if self.keys_file.exists():
-                        with open(self.keys_file) as f:
+                        with open(self.keys_file, 'r') as f:
                             self._key_types = json.load(f)
                 except Exception:
                     self._data = {}
@@ -263,7 +263,7 @@ class RocksdbSerializer(ASerialization):
         """RocksDB aliases."""
         return ["rocksdb", "RocksDB", "rdb"]
 
-    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes:
+    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> bytes:
         """
         Encode data to RocksDB-compatible bytes.
         Note: RocksDB is designed for file-based operations. This method
@@ -285,7 +285,7 @@ class RocksdbSerializer(ASerialization):
         # For in-memory transport, pickle the dictionary
         return pickle.dumps(value)
 
-    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: Optional[DecodeOptions] = None) -> Any:
         """
         Decode RocksDB bytes to Python data.
         Note: RocksDB is designed for file-based operations. This method

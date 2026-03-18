@@ -9,7 +9,7 @@
 
 ## Purpose
 
-DX contract for xwformats: happy paths, "key code," and ergonomics. Filled from REF_01_REQ. Developer experience should match serialization in xwsystem; no friction when moving between xwsystem formats and xwformats formats. Reuse 100% whatever is in xwsystem; minimize code writing.
+DX contract for xwformats: happy paths, "key code," and ergonomics. Filled from REF_01_REQ. Developer experience should be **seamless**—same feel as serialization in xwsystem; no friction when moving between xwsystem formats and xwformats formats. Reuse 100% whatever is in xwsystem; minimize code writing.
 
 ---
 
