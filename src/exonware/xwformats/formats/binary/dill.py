@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.0.1.4
+Version: 0.0.1.5
 Generation Date: 07-Jan-2025
 Dill Serialization - Extended Pickle for Complex Python Objects
 Dill extends Python's pickle to serialize complex objects:
