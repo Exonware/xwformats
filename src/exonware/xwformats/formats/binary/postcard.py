@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.0.1.5
+Version: 0.0.1.7
 Generation Date: 07-Jan-2025
 Postcard Serialization - Compact Binary Format for Embedded Systems
 Postcard is a compact binary serialization format designed for embedded systems:
