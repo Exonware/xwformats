@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.0.1.3
+Version: 0.0.1.4
 Generation Date: 15-Nov-2025
 XML Serialization - Extensible Markup Language
 XML is a markup language for structured data:

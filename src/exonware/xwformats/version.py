@@ -24,13 +24,13 @@ __company__ = "eXonware.com"
 # =============================================================================
 
 # Main version - update this to change version across entire project
-__version__ = "0.0.1.3"
+__version__ = "0.0.1.4"
 
 # Version components for programmatic access
 VERSION_MAJOR = 0
 VERSION_MINOR = 0
 VERSION_PATCH = 1
-VERSION_BUILD = 3  # Set to None for releases, or build number for dev builds
+VERSION_BUILD = 4  # Set to None for releases, or build number for dev builds
 
 # Version metadata
 VERSION_SUFFIX = ""  # e.g., "dev", "alpha", "beta", "rc1"
