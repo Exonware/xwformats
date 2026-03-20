@@ -57,8 +57,6 @@ Thumbs.db
 # Test output
 **/runner_out.md
 
-# Local archive folders
-.archieve/
-
-# Local secrets file
+# Local private paths (same treatment as .secrets)
 .secrets
+.archieve
