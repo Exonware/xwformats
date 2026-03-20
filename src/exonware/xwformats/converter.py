@@ -6,7 +6,7 @@ Optimized format conversion with caching and direct conversions where possible.
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.10
+Version: 0.9.0.11
 Generation Date: 15-Nov-2025
 Priority 1 (Security): Safe format conversion
 Priority 2 (Usability): Simple conversion API
