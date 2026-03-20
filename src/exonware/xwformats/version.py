@@ -32,7 +32,7 @@ def _today_release_date() -> str:
 
 
 # Main version - update this to change version across entire project
-__version__ = "0.9.0.17"
+__version__ = "0.9.0.18"
 # Release/update date (DD-MMM-YYYY). Evaluated at import time.
 __date__ = _today_release_date()
 
@@ -40,7 +40,7 @@ __date__ = _today_release_date()
 VERSION_MAJOR = 0
 VERSION_MINOR = 9
 VERSION_PATCH = 0
-VERSION_BUILD = 17  # Set to None for releases, or build number for dev builds
+VERSION_BUILD = 18  # Set to None for releases, or build number for dev builds
 
 # Version metadata
 VERSION_SUFFIX = ""  # e.g., "dev", "alpha", "beta", "rc1"
