@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.9
+Version: 0.9.0.10
 Generation Date: November 2, 2025
 
 Avro serialization - Apache Avro data serialization.
@@ -14,8 +14,7 @@ Following I→A→XW pattern:
 """
 
 import io
-from typing import Any, Optional, Union
-from pathlib import Path
+from typing import Any
 
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
@@ -104,7 +103,7 @@ class XWAvroSerializer(ASerialization):
     # CORE ENCODE/DECODE (Using fastavro)
     # ========================================================================
     
-    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> Union[bytes, str]:
+    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes | str:
         """
         Encode data to Avro bytes.
         
@@ -141,7 +140,7 @@ class XWAvroSerializer(ASerialization):
                 original_error=e
             )
     
-    def decode(self, repr: Union[bytes, str], *, options: Optional[DecodeOptions] = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
         """
         Decode Avro bytes to data.
         

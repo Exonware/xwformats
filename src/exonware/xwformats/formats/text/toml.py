@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.9
+Version: 0.9.0.10
 Generation Date: 15-Nov-2025
 TOML Serialization - Tom's Obvious Minimal Language
 TOML is a configuration file format:
@@ -19,7 +19,7 @@ Priority 4 (Performance): Efficient TOML parsing
 Priority 5 (Extensibility): Support TOML v1.0.0
 """
 
-from typing import Any, Optional
+from typing import Any, Final
 from pathlib import Path
 import tomli
 import tomli_w
@@ -27,6 +27,41 @@ from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.serialization.contracts import ISerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
 from exonware.xwsystem.io.errors import SerializationError
+
+# TOML documents are rooted at a table; tomli_w cannot dump a bare list/tuple.
+# We wrap list/tuple roots in a marked table and unwrap on decode so JSON/YAML
+# round-trips stay symmetric (GUIDE_53: fix root cause, preserve interchange).
+_TOML_LIST_ROOT_KIND: Final[str] = "list_root_v1"
+_TOML_LIST_ROOT_KEY: Final[str] = "_xwformats_list_root_"
+_TOML_LIST_ROOT_MARKER: Final[str] = "_xwformats_kind_"
+
+
+def _prepare_root_for_toml(data: Any) -> Any:
+    if isinstance(data, list):
+        return {
+            _TOML_LIST_ROOT_MARKER: _TOML_LIST_ROOT_KIND,
+            _TOML_LIST_ROOT_KEY: data,
+        }
+    if isinstance(data, tuple):
+        return {
+            _TOML_LIST_ROOT_MARKER: _TOML_LIST_ROOT_KIND,
+            _TOML_LIST_ROOT_KEY: list(data),
+        }
+    return data
+
+
+def _unwrap_list_root_document(data: Any) -> Any:
+    if not isinstance(data, dict):
+        return data
+    expected = {_TOML_LIST_ROOT_MARKER, _TOML_LIST_ROOT_KEY}
+    if set(data.keys()) != expected:
+        return data
+    if data.get(_TOML_LIST_ROOT_MARKER) != _TOML_LIST_ROOT_KIND:
+        return data
+    inner = data.get(_TOML_LIST_ROOT_KEY)
+    if not isinstance(inner, list):
+        return data
+    return inner
 
 
 class TomlSerializer(ASerialization):
@@ -79,12 +114,13 @@ class TomlSerializer(ASerialization):
     def encode(
         self,
         data: Any,
-        options: Optional[EncodeOptions] = None
+        options: EncodeOptions | None = None
     ) -> bytes:
         """
         Encode data to TOML.
         Args:
-            data: Data to encode (dict)
+            data: Data to encode (typically a dict). List/tuple roots are wrapped
+                in a reserved table so encoding matches TOML's root-table rule.
             options: Encoding options
         Returns:
             TOML-encoded bytes
@@ -92,10 +128,11 @@ class TomlSerializer(ASerialization):
             SerializationError: If encoding fails
         """
         try:
+            payload = _prepare_root_for_toml(data)
             if hasattr(tomli_w, 'dumps'):
-                toml_str = tomli_w.dumps(data)
+                toml_str = tomli_w.dumps(payload)
             else:
-                toml_str = tomli_w.dump(data)
+                toml_str = tomli_w.dump(payload)
             return toml_str.encode('utf-8')
         except Exception as e:
             raise SerializationError(f"TOML encoding failed: {e}") from e
@@ -103,7 +140,7 @@ class TomlSerializer(ASerialization):
     def decode(
         self,
         data: bytes | bytearray | str,
-        options: Optional[DecodeOptions] = None
+        options: DecodeOptions | None = None
     ) -> Any:
         """
         Decode TOML data.
@@ -111,7 +148,7 @@ class TomlSerializer(ASerialization):
             data: TOML-encoded bytes or string
             options: Decoding options
         Returns:
-            Decoded data (dict)
+            Decoded data (dict, or list if a list-root wrapper was produced by encode)
         Raises:
             SerializationError: If decoding fails
         """
@@ -119,9 +156,10 @@ class TomlSerializer(ASerialization):
             if isinstance(data, (bytes, bytearray)):
                 data = data.decode('utf-8')
             if hasattr(tomli, 'loads'):
-                return tomli.loads(data)
+                parsed = tomli.loads(data)
             else:
-                return tomli.load(data)
+                parsed = tomli.load(data)
+            return _unwrap_list_root_document(parsed)
         except Exception as e:
             raise SerializationError(f"TOML decoding failed: {e}") from e
 
@@ -129,7 +167,7 @@ class TomlSerializer(ASerialization):
         self,
         data: Any,
         file_path: str | Path,
-        options: Optional[EncodeOptions] = None
+        options: EncodeOptions | None = None
     ) -> None:
         """
         Encode data to TOML file.
@@ -145,7 +183,7 @@ class TomlSerializer(ASerialization):
     def decode_from_file(
         self,
         file_path: str | Path,
-        options: Optional[DecodeOptions] = None
+        options: DecodeOptions | None = None
     ) -> Any:
         """
         Decode TOML from file.

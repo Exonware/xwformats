@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.9
+Version: 0.9.0.10
 Generation Date: November 2, 2025
 
 FlatBuffers serialization - Memory-efficient serialization.
@@ -13,14 +13,12 @@ Following I→A→XW pattern:
 - XW: XWFlatBuffersSerializer (concrete implementation)
 """
 
-from typing import Any, Optional, Union
-from pathlib import Path
+from typing import Any
 
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
 from exonware.xwsystem.io.defs import CodecCapability
 from exonware.xwsystem.io.errors import SerializationError
-import flatbuffers
 
 
 class XWFlatBuffersSerializer(ASerialization):
@@ -70,7 +68,7 @@ class XWFlatBuffersSerializer(ASerialization):
     def aliases(self) -> list[str]:
         return ["flatbuffers", "fb"]
     
-    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> Union[bytes, str]:
+    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes | str:
         """Encode FlatBuffers data to bytes."""
         try:
             # Requires builder instance
@@ -80,7 +78,7 @@ class XWFlatBuffersSerializer(ASerialization):
         except Exception as e:
             raise SerializationError(f"Failed to encode FlatBuffers: {e}", self.format_name, e)
     
-    def decode(self, repr: Union[bytes, str], *, options: Optional[DecodeOptions] = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
         """Decode FlatBuffers bytes to data."""
         try:
             opts = options or {}

@@ -11,6 +11,7 @@ consistency across the project and tests.
 """
 
 from datetime import datetime
+from typing import Any
 
 # =============================================================================
 # PACKAGE METADATA
@@ -31,7 +32,7 @@ def _today_release_date() -> str:
 
 
 # Main version - update this to change version across entire project
-__version__ = "0.9.0.9"
+__version__ = "0.9.0.10"
 # Release/update date (DD-MMM-YYYY). Evaluated at import time.
 __date__ = _today_release_date()
 
@@ -39,7 +40,7 @@ __date__ = _today_release_date()
 VERSION_MAJOR = 0
 VERSION_MINOR = 9
 VERSION_PATCH = 0
-VERSION_BUILD = 9  # Set to None for releases, or build number for dev builds
+VERSION_BUILD = 10  # Set to None for releases, or build number for dev builds
 
 # Version metadata
 VERSION_SUFFIX = ""  # e.g., "dev", "alpha", "beta", "rc1"
@@ -60,12 +61,12 @@ def get_date() -> str:
     return __date__
 
 
-def get_version_info() -> tuple:
+def get_version_info() -> tuple[int, int, int, int | None]:
     """Get version as a tuple (major, minor, patch, build)."""
     return (VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH, VERSION_BUILD)
 
 
-def get_version_dict() -> dict:
+def get_version_dict() -> dict[str, Any]:
     """Get version information as a dictionary."""
     return {
         "version": VERSION_STRING,

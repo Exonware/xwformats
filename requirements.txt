@@ -6,12 +6,12 @@
 # Generation Date: 02-Nov-2025
 #
 # This file contains all dependencies for xwformats' 18 enterprise formats
-# Compatible with Python 3.8+
+# Compatible with Python 3.12+ (see pyproject.toml requires-python)
 
 # =============================================================================
 # CORE DEPENDENCY
 # =============================================================================
-# Source size (src/*): ~191.0 KB
+# Source size (src/*): ~190.7 KB
 exonware-xwsystem>=0.0.1       # Foundation library
 
 # =============================================================================

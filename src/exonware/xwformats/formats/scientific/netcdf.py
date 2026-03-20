@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.9
+Version: 0.9.0.10
 Generation Date: 02-Nov-2025
 
 NetCDF Serialization - Network Common Data Form
@@ -22,14 +22,11 @@ Priority 4 (Performance): Efficient array storage
 Priority 5 (Extensibility): CF conventions support
 """
 
-from typing import Any, Dict, Optional, Union
+from typing import Any
 from pathlib import Path
 import netCDF4
-import numpy as np
 
 from exonware.xwsystem.io.serialization.base import ASerialization
-from exonware.xwsystem.io.serialization.contracts import ISerialization
-from exonware.xwsystem.io.errors import SerializationError
 
 
 class XWNetcdfSerializer(ASerialization):
@@ -60,7 +57,7 @@ class XWNetcdfSerializer(ASerialization):
         """Supported file extensions."""
         return [".nc", ".nc4", ".netcdf"]
     
-    def encode(self, data: Any, options: Optional[Dict[str, Any]] = None) -> bytes:
+    def encode(self, data: Any, options: dict[str, Any] | None = None) -> bytes:
         """
         Encode data to NetCDF bytes.
         
@@ -79,7 +76,7 @@ class XWNetcdfSerializer(ASerialization):
             "Use encode_to_file() or save to file directly."
         )
     
-    def decode(self, data: bytes, options: Optional[Dict[str, Any]] = None) -> Any:
+    def decode(self, data: bytes, options: dict[str, Any] | None = None) -> Any:
         """
         Decode NetCDF bytes to Python data.
         
@@ -98,7 +95,7 @@ class XWNetcdfSerializer(ASerialization):
             "Use decode_from_file() or load from file directly."
         )
     
-    def encode_to_file(self, data: Any, file_path: Union[str, Path], options: Optional[Dict[str, Any]] = None) -> None:
+    def encode_to_file(self, data: Any, file_path: str | Path, options: dict[str, Any] | None = None) -> None:
         """
         Encode data to NetCDF file.
         
@@ -136,7 +133,7 @@ class XWNetcdfSerializer(ASerialization):
                 for attr_name, attr_value in data['attributes'].items():
                     setattr(nc, attr_name, attr_value)
     
-    def decode_from_file(self, file_path: Union[str, Path], options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def decode_from_file(self, file_path: str | Path, options: dict[str, Any] | None = None) -> dict[str, Any]:
         """
         Decode NetCDF file to Python dict.
         

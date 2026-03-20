@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.9
+Version: 0.9.0.10
 Generation Date: November 2, 2025
 
 LMDB serialization - Lightning Memory-Mapped Database.
@@ -13,14 +13,11 @@ Following I→A→XW pattern:
 - XW: XWLmdbSerializer (concrete implementation)
 """
 
-from typing import Any, Optional, Union
-from pathlib import Path
+from typing import Any
 
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
 from exonware.xwsystem.io.defs import CodecCapability
-from exonware.xwsystem.io.errors import SerializationError
-import lmdb
 
 
 class XWLmdbSerializer(ASerialization):
@@ -66,11 +63,11 @@ class XWLmdbSerializer(ASerialization):
     def aliases(self) -> list[str]:
         return ["lmdb", "LMDB"]
     
-    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> Union[bytes, str]:
+    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes | str:
         """LMDB encode requires file path - use save_file() instead."""
         raise NotImplementedError("LMDB requires file-based operations - use save_file()")
     
-    def decode(self, repr: Union[bytes, str], *, options: Optional[DecodeOptions] = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
         """LMDB decode requires file path - use load_file() instead."""
         raise NotImplementedError("LMDB requires file-based operations - use load_file()")
 

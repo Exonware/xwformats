@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.9
+Version: 0.9.0.10
 Generation Date: November 2, 2025
 
 Thrift serialization - Apache Thrift RPC framework.
@@ -13,14 +13,13 @@ Following I→A→XW pattern:
 - XW: XWThriftSerializer (concrete implementation)
 """
 
-from typing import Any, Optional, Union
-from pathlib import Path
+from typing import Any
 
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
 from exonware.xwsystem.io.defs import CodecCapability
 from exonware.xwsystem.io.errors import SerializationError
-from thrift.protocol import TBinaryProtocol, TCompactProtocol
+from thrift.protocol import TBinaryProtocol
 from thrift.transport import TTransport
 
 
@@ -71,7 +70,7 @@ class XWThriftSerializer(ASerialization):
     def aliases(self) -> list[str]:
         return ["thrift", "THRIFT"]
     
-    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> Union[bytes, str]:
+    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes | str:
         """Encode Thrift struct to bytes."""
         try:
             trans = TTransport.TMemoryBuffer()
@@ -81,7 +80,7 @@ class XWThriftSerializer(ASerialization):
         except Exception as e:
             raise SerializationError(f"Failed to encode Thrift: {e}", self.format_name, e)
     
-    def decode(self, repr: Union[bytes, str], *, options: Optional[DecodeOptions] = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
         """Decode Thrift bytes to struct."""
         try:
             opts = options or {}

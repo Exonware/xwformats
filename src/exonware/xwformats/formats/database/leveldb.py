@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.9
+Version: 0.9.0.10
 Generation Date: 02-Nov-2025
 
 LevelDB Serialization - Google's Fast Key-Value Store
@@ -22,7 +22,7 @@ Priority 4 (Performance): Very fast operations
 Priority 5 (Extensibility): Embeddable database
 """
 
-from typing import Any, Dict, Optional, Union
+from typing import Any
 from pathlib import Path
 import pickle
 
@@ -32,7 +32,6 @@ except ImportError:  # pragma: no cover - exercised via environment without plyv
     plyvel = None  # type: ignore[assignment]
 
 from exonware.xwsystem.io.serialization.base import ASerialization
-from exonware.xwsystem.io.serialization.contracts import ISerialization
 from exonware.xwsystem.io.errors import SerializationError
 
 
@@ -67,7 +66,7 @@ class XWLeveldbSerializer(ASerialization):
         """Supported file extensions."""
         return [".ldb", ".leveldb"]
     
-    def encode(self, data: Any, options: Optional[Dict[str, Any]] = None) -> bytes:
+    def encode(self, data: Any, options: dict[str, Any] | None = None) -> bytes:
         """
         Encode data to LevelDB-compatible bytes.
         
@@ -86,7 +85,7 @@ class XWLeveldbSerializer(ASerialization):
         
         return pickle.dumps(data)
     
-    def decode(self, data: bytes, options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def decode(self, data: bytes, options: dict[str, Any] | None = None) -> dict[str, Any]:
         """
         Decode LevelDB bytes to Python dict.
         
@@ -99,7 +98,7 @@ class XWLeveldbSerializer(ASerialization):
         """
         return pickle.loads(data)
     
-    def encode_to_file(self, data: Any, file_path: Union[str, Path], options: Optional[Dict[str, Any]] = None) -> None:
+    def encode_to_file(self, data: Any, file_path: str | Path, options: dict[str, Any] | None = None) -> None:
         """
         Encode data to LevelDB database file.
         
@@ -135,7 +134,7 @@ class XWLeveldbSerializer(ASerialization):
         finally:
             db.close()
     
-    def decode_from_file(self, file_path: Union[str, Path], options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def decode_from_file(self, file_path: str | Path, options: dict[str, Any] | None = None) -> dict[str, Any]:
         """
         Decode LevelDB database file to Python dict.
         

@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.9
+Version: 0.9.0.10
 Generation Date: 15-Nov-2025
 CSV Serialization - Comma-Separated Values
 CSV is a simple text format for tabular data:
@@ -19,7 +19,7 @@ Priority 4 (Performance): Efficient CSV parsing
 Priority 5 (Extensibility): Support various CSV dialects
 """
 
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 import csv
 import io
@@ -79,7 +79,7 @@ class CsvSerializer(ASerialization):
     def encode(
         self,
         data: Any,
-        options: Optional[EncodeOptions] = None
+        options: EncodeOptions | None = None
     ) -> bytes:
         """
         Encode data to CSV.
@@ -147,7 +147,7 @@ class CsvSerializer(ASerialization):
     def decode(
         self,
         data: bytes | bytearray | str,
-        options: Optional[DecodeOptions] = None
+        options: DecodeOptions | None = None
     ) -> Any:
         """
         Decode CSV data.
@@ -190,7 +190,7 @@ class CsvSerializer(ASerialization):
         self,
         data: Any,
         file_path: str | Path,
-        options: Optional[EncodeOptions] = None
+        options: EncodeOptions | None = None
     ) -> None:
         """
         Encode data to CSV file.
@@ -206,7 +206,7 @@ class CsvSerializer(ASerialization):
     def decode_from_file(
         self,
         file_path: str | Path,
-        options: Optional[DecodeOptions] = None
+        options: DecodeOptions | None = None
     ) -> Any:
         """
         Decode CSV from file.

@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.9
+Version: 0.9.0.10
 Generation Date: 07-Jan-2025
 RON Serialization - Rusty Object Notation
 RON is a human-readable data serialization format with Rust-like syntax:
@@ -25,7 +25,7 @@ Priority 4 (Performance): Efficient RON parsing
 Priority 5 (Extensibility): Support complex Rust data structures
 """
 
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 # RON library - Try external packages first, then use built-in implementation
 # External packages: python-ron (if available), otherwise use built-in parser
@@ -58,7 +58,7 @@ if not _RON_AVAILABLE:
     # Built-in RON parser implementation
     import json
     import re
-    from typing import Any
+
     class _BuiltinRon:
         """Built-in RON parser for basic RON syntax support."""
         @staticmethod
@@ -261,7 +261,7 @@ class RonSerializer(ASerialization):
         """RON is a text serialization format with Rust-like syntax."""
         return ["text", "serialization", "rust", "config"]
 
-    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> bytes | str:
+    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes | str:
         """
         Encode data to RON string.
         Uses ron library for RON serialization.
@@ -298,7 +298,7 @@ class RonSerializer(ASerialization):
                 original_error=e
             ) from e
 
-    def decode(self, repr: bytes | str, *, options: Optional[DecodeOptions] = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
         """
         Decode RON string to data.
         Uses ron library for RON deserialization.

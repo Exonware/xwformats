@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.9
+Version: 0.9.0.10
 Generation Date: November 2, 2025
 
 HDF5 serialization - Hierarchical Data Format.
@@ -13,15 +13,11 @@ Following I→A→XW pattern:
 - XW: XWHdf5Serializer (concrete implementation)
 """
 
-import io
-from typing import Any, Optional, Union
-from pathlib import Path
+from typing import Any
 
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
 from exonware.xwsystem.io.defs import CodecCapability
-from exonware.xwsystem.io.errors import SerializationError
-import h5py
 
 
 class XWHdf5Serializer(ASerialization):
@@ -71,11 +67,11 @@ class XWHdf5Serializer(ASerialization):
     def aliases(self) -> list[str]:
         return ["hdf5", "HDF5", "h5"]
     
-    def encode(self, value: Any, *, options: Optional[EncodeOptions] = None) -> Union[bytes, str]:
+    def encode(self, value: Any, *, options: EncodeOptions | None = None) -> bytes | str:
         """Encode data to HDF5 bytes (requires file path in options)."""
         raise NotImplementedError("HDF5 encode to memory not supported - use save_file() instead")
     
-    def decode(self, repr: Union[bytes, str], *, options: Optional[DecodeOptions] = None) -> Any:
+    def decode(self, repr: bytes | str, *, options: DecodeOptions | None = None) -> Any:
         """Decode HDF5 bytes to data (requires file path in options)."""
         raise NotImplementedError("HDF5 decode from memory not supported - use load_file() instead")
 

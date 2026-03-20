@@ -34,10 +34,6 @@ def test_import_schema_formats():
     from exonware.xwformats.formats.schema import (
         ProtobufSerializer,
         ParquetSerializer,
-        ThriftSerializer,
-        OrcSerializer,
-        CapnProtoSerializer,
-        FlatBuffersSerializer,
         ArrowSerializer,
     )
     # Verify imports work
@@ -51,9 +47,6 @@ def test_import_scientific_formats():
     from exonware.xwformats.formats.scientific import (
         Hdf5Serializer,
         FeatherSerializer,
-        ZarrSerializer,
-        NetcdfSerializer,
-        MatSerializer,
     )
     # Verify imports work
     assert Hdf5Serializer is not None

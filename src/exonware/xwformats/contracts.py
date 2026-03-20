@@ -5,11 +5,11 @@ Protocol interfaces for xwformats.
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.9
+Version: 0.9.0.10
 Generation Date: 07-Jan-2025
 """
 
-from typing import Any, Optional, Protocol, runtime_checkable
+from typing import Any, Protocol, runtime_checkable
 from pathlib import Path
 @runtime_checkable
 
@@ -31,11 +31,11 @@ class IFormatSerializer(Protocol):
         """Check if format is binary."""
         ...
 
-    def encode(self, data: Any, options: Optional[dict[str, Any]] = None) -> bytes:
+    def encode(self, data: Any, options: dict[str, Any] | None = None) -> bytes:
         """Encode data to format."""
         ...
 
-    def decode(self, data: bytes, options: Optional[dict[str, Any]] = None) -> Any:
+    def decode(self, data: bytes, options: dict[str, Any] | None = None) -> Any:
         """Decode data from format."""
         ...
 @runtime_checkable
@@ -48,7 +48,7 @@ class IFormatConverter(Protocol):
         data: Any,
         from_format: str,
         to_format: str,
-        options: Optional[dict[str, Any]] = None
+        options: dict[str, Any] | None = None
     ) -> Any:
         """Convert data between formats."""
         ...
@@ -61,7 +61,7 @@ class IFormatRegistry(Protocol):
         """Register a serializer class."""
         ...
 
-    def get(self, format_name: str) -> Optional[IFormatSerializer]:
+    def get(self, format_name: str) -> IFormatSerializer | None:
         """Get serializer by format name."""
         ...
 

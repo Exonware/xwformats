@@ -7,5 +7,4 @@ Allows: import xwformats
 Instead of: import exonware.xwformats
 """
 
-from exonware.xwformats import *
 
