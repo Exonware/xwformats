@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.18
+Version: 0.9.0.19
 Generation Date: 15-Nov-2025
 XML Serialization - Extensible Markup Language
 XML is a markup language for structured data:
@@ -137,9 +137,9 @@ class XmlSerializer(ASerialization):
         try:
             if isinstance(data, (bytes, bytearray)):
                 data = data.decode('utf-8')
-            # Parse XML with safe parser (disable XXE)
+            # Parse XML with stdlib parser.
+            # On Python 3.12+, parser.entity is read-only, so avoid mutating it.
             parser = ET.XMLParser()
-            parser.entity = {}  # Disable external entity expansion
             root = ET.fromstring(data, parser=parser)
             if return_type == 'element':
                 return root
@@ -194,6 +194,7 @@ class XmlSerializer(ASerialization):
             else:
                 result[child.tag] = child_dict
         return result
+
 
     def encode_to_file(
         self,

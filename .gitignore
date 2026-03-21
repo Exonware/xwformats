@@ -60,3 +60,4 @@ Thumbs.db
 # Local private paths (same treatment as .secrets)
 .secrets
 .archieve
+.examples/
