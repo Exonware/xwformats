@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.19
+Version: 0.9.0.20
 Generation Date: 07-Jan-2025
 Bincode Serialization - Rust's Native Binary Format
 Bincode is Rust's native binary serialization format that:
