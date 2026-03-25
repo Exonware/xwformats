@@ -1,47 +1,70 @@
 # Documentation index — xwformats
 
-**Last Updated:** 08-Feb-2026
+**Last Updated:** 25-Mar-2026  
 
-Navigation hub for xwformats docs. Per GUIDE_41_DOCS and GUIDE_00_MASTER.
+Navigation hub for xwformats. **Rule:** only `README.md` at repo root; everything else is under `docs/` ([GUIDE_41_DOCS](../../.docs/guides/GUIDE_41_DOCS.md)).
+
+---
+
+## Repo layout (documentation)
+
+```
+xwformats/
+├── README.md                 ← only Markdown at root
+├── LICENSE
+├── docs/                     ← all project docs
+│   ├── INDEX.md              ← this file
+│   ├── README.md             ← docs landing
+│   ├── REF_*.md, GUIDE_01_USAGE.md
+│   ├── changes/              ← stubs → _archive
+│   ├── _archive/             ← full historical write-ups
+│   └── logs/                 ← evidence (tests, reviews, compliance)
+└── src/, tests/, …
+```
+
+---
 
 ## References (REF_*)
 
-| Document | Purpose | Producing guide |
-|----------|---------|------------------|
-| [REF_01_REQ.md](REF_01_REQ.md) | Requirements (source) | GUIDE_01_REQ |
-| [REF_22_PROJECT.md](REF_22_PROJECT.md) | Vision, requirements, milestones | GUIDE_22_PROJECT |
-| [REF_12_IDEA.md](REF_12_IDEA.md) | Idea context and product direction | GUIDE_12_IDEA |
-| [REF_13_ARCH.md](REF_13_ARCH.md) | Architecture, structure, boundaries | GUIDE_13_ARCH |
-| [REF_14_DX.md](REF_14_DX.md) | Developer experience, key code | GUIDE_14_DX |
-| [REF_15_API.md](REF_15_API.md) | API reference | GUIDE_15_API |
-| [REF_35_REVIEW.md](REF_35_REVIEW.md) | Review summary and status | GUIDE_35_REVIEW |
-| [REF_51_TEST.md](REF_51_TEST.md) | Test status and coverage | GUIDE_51_TEST |
+| Document | Purpose |
+|----------|---------|
+| [REF_01_REQ.md](REF_01_REQ.md) | Requirements |
+| [REF_22_PROJECT.md](REF_22_PROJECT.md) | Vision, milestones, **status overview** |
+| [REF_12_IDEA.md](REF_12_IDEA.md) | Ideas / direction |
+| [REF_13_ARCH.md](REF_13_ARCH.md) | Architecture |
+| [REF_14_DX.md](REF_14_DX.md) | Developer experience |
+| [REF_15_API.md](REF_15_API.md) | API reference |
+| [REF_35_REVIEW.md](REF_35_REVIEW.md) | Review summary |
+| [REF_51_TEST.md](REF_51_TEST.md) | Test status |
+
+---
 
 ## Usage
 
 | Document | Purpose |
 |----------|---------|
-| [GUIDE_01_USAGE.md](GUIDE_01_USAGE.md) | How to use xwformats (GUIDE_41_DOCS) |
+| [GUIDE_01_USAGE.md](GUIDE_01_USAGE.md) | Install modes, examples, key workflows |
 
-## Other
+---
 
-| Path | Purpose |
-|------|---------|
-| [_archive/](_archive/) | Historical content (absorbed from changes/): KNOWN_ISSUES, CRITICAL_FIXES_APPLIED, XWFORMATS_COMPLETE_FIX_GUIDE; current status in REF_22_PROJECT and REF_35_REVIEW. |
-| [changes/](changes/) | Redirects to _archive for historical change notes; canonical status in REF_22_PROJECT. |
-| [logs/](logs/) | Test summaries, REVIEW_*, setup notes (canonical evidence per GUIDE_00_MASTER). |
+## Historical and compliance (not root-level)
 
-## Evidence (logs)
+| Location | Contents |
+|----------|----------|
+| [_archive/](_archive/) | **Full** KNOWN_ISSUES, CRITICAL_FIXES_APPLIED, XWFORMATS_COMPLETE_FIX_GUIDE |
+| [changes/](changes/) | Short redirects into `_archive/` (keeps deep links aligned with GUIDE_41 `changes/`) |
+| [logs/reviews/](logs/reviews/) | REVIEW_* evidence |
+| [logs/tests/](logs/tests/) | TEST_* summaries (canonical evidence path) |
+| [logs/setup/](logs/setup/) | Platform build notes (e.g. RocksDB on Windows) |
+| [logs/FINAL_COMPLIANCE_REPORT.md](logs/FINAL_COMPLIANCE_REPORT.md) | Compliance report snapshot |
+| [logs/REVIEW_SUMMARY.md](logs/REVIEW_SUMMARY.md) | Review summary (Nov 2025) |
+| [logs/STATUS.md](logs/STATUS.md) | Legacy status snapshot |
 
-| Location | Content |
-|----------|---------|
-| [logs/reviews/](logs/reviews/) | REVIEW_* (GUIDE_35_REVIEW) |
-| [logs/tests/](logs/tests/) | TEST_* (test run evidence) |
-| [logs/setup/](logs/setup/) | Platform/build notes (e.g. RocksDB on Windows) |
+---
 
 ## Standards
 
-- Only `README.md` at repo root; all other Markdown under `docs/` (GUIDE_41_DOCS).
+Company-wide **GUIDE_*** documents stay in the monorepo `.docs/guides/`. This package publishes **REF_***, **GUIDE_01_USAGE**, and evidence under `docs/` only.
 
 ---
 

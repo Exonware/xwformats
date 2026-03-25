@@ -6,7 +6,7 @@ Enterprise text serialization formats.
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.20
+Version: 0.9.0.21
 Generation Date: 02-Nov-2025
 
 Text formats in xwformats extend the lightweight xwsystem core formats with

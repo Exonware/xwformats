@@ -204,9 +204,9 @@ xwformats is architecturally sound and follows guidelines. External dependency b
 ## 📚 Files Created/Modified
 
 ### New Files
-- `xwformats/CRITICAL_FIXES_APPLIED.md` - Detailed fix documentation
-- `xwformats/KNOWN_ISSUES.md` - External dependency issues
-- `xwformats/REVIEW_SUMMARY.md` - This file
+- `docs/_archive/CRITICAL_FIXES_APPLIED.md` — detailed fix documentation
+- `docs/_archive/KNOWN_ISSUES.md` — external dependency issues
+- `docs/logs/REVIEW_SUMMARY.md` — this file
 - `xwformats/tests/conftest.py` - Test configuration
 - `xwformats/tests/0.core/test_import.py` - Import tests
 - `xwformats/tests/1.unit/formats_tests/test_serializers_basic.py` - Unit tests

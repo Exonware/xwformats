@@ -10,7 +10,7 @@ specialized domains (scientific computing, big data, enterprise systems).
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.20
+Version: 0.9.0.21
 Generation Date: 02-Nov-2025
 
 Formats provided:
@@ -59,7 +59,7 @@ from .formats.schema import (
     XWFlatBuffersSerializer,
     ArrowSerializer,
 )
-# Note: Avro excluded due to cramjam bug on Python 3.12 Windows - see KNOWN_ISSUES.md
+# Note: Avro excluded due to cramjam bug on Python 3.12 Windows — see docs/_archive/KNOWN_ISSUES.md
 from .formats.scientific import (
     XWHdf5Serializer,
     XWFeatherSerializer,
@@ -91,7 +91,7 @@ from .formats.text import (
 
 # Register all serializers
 for _serializer_class in [
-    # Schema formats (Avro excluded - see KNOWN_ISSUES.md)
+    # Schema formats (Avro excluded — see docs/_archive/KNOWN_ISSUES.md)
     XWProtobufSerializer,
     XWParquetSerializer,
     XWThriftSerializer,
