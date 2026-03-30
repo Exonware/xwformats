@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.22
+Version: 0.9.0.23
 Generation Date: 15-Nov-2025
 TOML Serialization - Tom's Obvious Minimal Language
 TOML is a configuration file format:

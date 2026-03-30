@@ -72,8 +72,6 @@ MIT - see [LICENSE](LICENSE).
 
 - **Homepage:** https://exonware.com  
 - **Repository:** https://github.com/exonware/xwformats  
-
-Contributing: CONTRIBUTING.md · Security: SECURITY.md (when present).
-Version: 0.9.0.22 | Updated: 30-Mar-2026
+Version: 0.9.0.23 | Updated: 30-Mar-2026
 
 *Built with ❤️ by eXonware.com - Revolutionizing Python Development Since 2025*
