@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.21
+Version: 0.9.0.22
 Generation Date: November 2, 2025
 
 FlatBuffers serialization - Memory-efficient serialization.

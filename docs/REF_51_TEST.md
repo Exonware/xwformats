@@ -4,7 +4,7 @@
 **Last Updated:** 08-Feb-2026  
 **Requirements source:** [REF_01_REQ.md](REF_01_REQ.md)
 
-Test status and coverage (output of GUIDE_51_TEST). Evidence: repo `tests/`, `docs/logs/tests/`. Test summaries in `docs/logs/tests/` (and optionally `docs/tests/` if runner is configured there).
+Test status and coverage (output of GUIDE_51_TEST). Evidence: repo `tests/`, **`docs/logs/tests/`** ([INDEX](logs/tests/INDEX.md)). Legacy copies may exist under `docs/tests/` (redirect only).
 
 ## Test layers
 
@@ -35,7 +35,7 @@ python tests/runner.py
   - `python tests/runner.py --security` — security tests (delegated to 3.advance runner if present).
   - `python tests/runner.py --performance` — performance tests (delegated to 3.advance runner if present).
 
-Output: terminal (colored/formatted) and a Markdown summary file. The main runner currently writes to `docs/tests/TEST_<timestamp>_SUMMARY.md`; evidence is also collected under `docs/logs/tests/` (see Evidence below).
+Output: terminal (colored/formatted) and a Markdown summary. The main runner writes to **`docs/logs/tests/TEST_<timestamp>_SUMMARY.md`** (see Evidence below).
 
 ## Evidence
 

@@ -1,4 +1,4 @@
-# Source size (src/*): ~190.7 KB
+# Source size (src/*): ~190.2 KB
 [build-system]
 requires = [
     "hatchling",
@@ -13,34 +13,8 @@ dynamic = [
 description = "Convenience wrapper for exonware-xwformats - provides 'import xwformats' alias"
 readme = "README.md"
 requires-python = ">=3.8"
-keywords = [
-    "serialization",
-    "parquet",
-    "avro",
-    "hdf5",
-    "netcdf",
-    "protobuf",
-    "thrift",
-    "scientific",
-    "enterprise",
-    "formats",
-    "exonware",
-]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Scientific/Engineering",
-]
+keywords = []
+classifiers = []
 dependencies = [
     "exonware-xwformats",
 ]
@@ -54,6 +28,9 @@ text = "MIT"
 [project.optional-dependencies]
 lazy = [
     "exonware-xwformats[lazy]",
+]
+dev = [
+    "exonware-xwformats[dev]",
 ]
 full = [
     "exonware-xwformats[full]",

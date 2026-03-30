@@ -1,3 +1,7 @@
-# Test evidence (redirect)
+# Test summaries (redirect)
 
-Test run evidence lives in [docs/logs/tests/](../logs/tests/) per GUIDE_00_MASTER. See [REF_51_TEST.md](../REF_51_TEST.md) and [INDEX.md](../INDEX.md).
+Test run evidence (`TEST_*_SUMMARY.md`) lives here:
+
+**[docs/logs/tests/](../logs/tests/)** - see [INDEX.md](../logs/tests/INDEX.md).
+
+The main runner (`python tests/runner.py`) writes new summaries under `docs/logs/tests/` per GUIDE_51_TEST and GUIDE_41_DOCS.

@@ -18,7 +18,7 @@ Usage:
     python tests/runner.py --performance  # Run only performance tests
 Output:
     - Terminal: Colored, formatted output
-    - File: docs/tests/TEST_<timestamp>_SUMMARY.md (Markdown-friendly format)
+    - File: docs/logs/tests/TEST_<timestamp>_SUMMARY.md (Markdown-friendly format)
 """
 
 import sys
@@ -101,8 +101,8 @@ def main():
     """Main test runner function following GUIDE_TEST.md."""
     test_dir = Path(__file__).parent
     root_dir = test_dir.parent
-    # Setup reports directory (GUIDE_TEST.md: Main runner persists Markdown in docs/tests/)
-    reports_dir = root_dir / "docs" / "tests"
+    # Canonical test evidence: docs/logs/tests/ (GUIDE_51_TEST / GUIDE_41_DOCS)
+    reports_dir = root_dir / "docs" / "logs" / "tests"
     reports_dir.mkdir(parents=True, exist_ok=True)
     try:
         from exonware.xwsystem.utils.test_runner import timestamp_for_filename

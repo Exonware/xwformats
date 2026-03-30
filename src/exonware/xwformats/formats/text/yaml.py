@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.21
+Version: 0.9.0.22
 Generation Date: 15-Nov-2025
 YAML Serialization - YAML Ain't Markup Language
 YAML is a human-readable data serialization format:

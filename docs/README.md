@@ -3,15 +3,15 @@
 # xwformats documentation
 
 **Library:** exonware-xwformats  
-**Layout:** Per [GUIDE_41_DOCS](../../.docs/guides/GUIDE_41_DOCS.md) (monorepo) — all Markdown lives under `docs/` except the repo root `README.md`.
+**Layout:** Per [GUIDE_41_DOCS](../../.docs/guides/GUIDE_41_DOCS.md) (monorepo): Markdown lives under `docs/` except the root `README.md`.
 
 ## Start here
 
 | Go to | For |
 |-------|-----|
 | [INDEX.md](INDEX.md) | Full doc map and folder layout |
-| [GUIDE_01_USAGE.md](GUIDE_01_USAGE.md) | How to install and use the library |
-| [REF_22_PROJECT.md](REF_22_PROJECT.md) | Vision, requirements, **project status** |
+| [GUIDE_01_USAGE.md](GUIDE_01_USAGE.md) | Install and use the library |
+| [REF_22_PROJECT.md](REF_22_PROJECT.md) | Vision, requirements, project status |
 | [REF_15_API.md](REF_15_API.md) | Public API reference |
 
 ## Folder map
@@ -30,14 +30,14 @@ docs/
     └── setup/
 ```
 
-**Note:** Some older `docs/tests/` files may exist; prefer `docs/logs/tests/` for new test evidence.
+`docs/tests/` only hosts a [README redirect](tests/README.md); new run summaries go under `docs/logs/tests/`.
 
 ## Production readers
 
-- **Operators:** [REF_22_PROJECT.md](REF_22_PROJECT.md) (status), [REF_51_TEST.md](REF_51_TEST.md), [REF_35_REVIEW.md](REF_35_REVIEW.md).
+- **Operators:** [REF_22_PROJECT.md](REF_22_PROJECT.md), [REF_51_TEST.md](REF_51_TEST.md), [REF_35_REVIEW.md](REF_35_REVIEW.md).
 - **Platform limits:** [_archive/KNOWN_ISSUES.md](_archive/KNOWN_ISSUES.md), [logs/setup/](logs/setup/).
-- **Historical compliance work:** [_archive/](_archive/), [logs/FINAL_COMPLIANCE_REPORT.md](logs/FINAL_COMPLIANCE_REPORT.md).
+- **Older compliance narratives:** [_archive/](_archive/), [logs/FINAL_COMPLIANCE_REPORT.md](logs/FINAL_COMPLIANCE_REPORT.md).
 
 ---
 
-*Central company guides (GUIDE_31_DEV, GUIDE_41_DOCS, …) live in the monorepo `.docs/guides/`, not in this package.*
+Company-wide guides (GUIDE_31_DEV, GUIDE_41_DOCS, …) live in the monorepo `.docs/guides/`, not inside this package.

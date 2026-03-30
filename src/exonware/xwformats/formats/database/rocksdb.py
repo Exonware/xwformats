@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.21
+Version: 0.9.0.22
 Generation Date: 07-Jan-2025
 RocksDB Serialization - High-Performance Key-Value Store
 RocksDB is a persistent key-value store for fast storage based on a log-structured
@@ -46,7 +46,7 @@ except ImportError:
         rocksdb = None  # type: ignore
 if not _ROCKSDB_AVAILABLE:
     # Pure Python fallback implementation - mimics RocksDB interface
-    import json
+    from exonware.xwsystem.io.serialization.formats.text.json import dump, load, loads
     import os
     from pathlib import Path as _Path
     class CompressionType:
@@ -99,12 +99,12 @@ if not _ROCKSDB_AVAILABLE:
                 try:
                     with open(self.data_file, 'rb') as f:
                         content = f.read().decode('utf-8')
-                        data_dict = json.loads(content)
+                        data_dict = loads(content)
                         self._data = {k: bytes.fromhex(v) for k, v in data_dict.items()}
                     # Load key type information if available
                     if self.keys_file.exists():
                         with open(self.keys_file, 'r') as f:
-                            self._key_types = json.load(f)
+                            self._key_types = load(f)
                 except Exception:
                     self._data = {}
                     self._key_types = {}
@@ -171,10 +171,10 @@ if not _ROCKSDB_AVAILABLE:
                 self.path.mkdir(parents=True, exist_ok=True)
             data_dict = {k: v.hex() for k, v in self._data.items()}
             with open(self.data_file, 'w') as f:
-                json.dump(data_dict, f)
+                dump(data_dict, f)
             # Save key type information
             with open(self.keys_file, 'w') as f:
-                json.dump(self._key_types, f)
+                dump(self._key_types, f)
     # Create module-like object
     class _RocksDBModule:
         DB = DB

@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.21
+Version: 0.9.0.22
 Generation Date: 07-Jan-2025
 RON Serialization - Rusty Object Notation
 RON is a human-readable data serialization format with Rust-like syntax:
@@ -56,7 +56,11 @@ if not _RON_AVAILABLE:
     _RON_AVAILABLE = True  # Built-in parser is always available
     _USE_EXTERNAL = False
     # Built-in RON parser implementation
-    import json
+    from exonware.xwsystem.io.serialization.formats.text.json import (
+        JSONDecodeError,
+        dumps,
+        loads,
+    )
     import re
 
     class _BuiltinRon:
@@ -89,7 +93,7 @@ if not _RON_AVAILABLE:
                 return f'({", ".join(items)})'
             else:
                 # Fallback to JSON for unknown types
-                json_str = json.dumps(obj)
+                json_str = dumps(obj)
                 return json_str
         @staticmethod
         def loads(s: str) -> Any:
@@ -176,8 +180,8 @@ if not _RON_AVAILABLE:
                 return result
             # Fallback to JSON parsing
             try:
-                return json.loads(s)
-            except json.JSONDecodeError:
+                return loads(s)
+            except JSONDecodeError:
                 raise ValueError(f"Unable to parse RON string: {s[:50]}...")
     ron = _BuiltinRon()
 from exonware.xwsystem.io.serialization.base import ASerialization

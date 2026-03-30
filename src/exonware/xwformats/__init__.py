@@ -10,7 +10,7 @@ specialized domains (scientific computing, big data, enterprise systems).
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.21
+Version: 0.9.0.22
 Generation Date: 02-Nov-2025
 
 Formats provided:
@@ -23,16 +23,22 @@ Formats provided:
 Total: 17 enterprise formats (~87 MB dependencies)
 
 Installation:
-    # Install with all dependencies
-    pip install exonware-xwformats[full]
-    
-    # Or minimal install (dependencies required separately)
-    pip install exonware-xwformats
+    pip install exonware-xwformats              # lite: xwsystem + xwlazy
+    pip install exonware-xwformats[lazy]        # lazy stack
+    pip install exonware-xwformats[full]        # format backends (see pyproject.toml)
+    pip install exonware-xwformats[dev]         # pytest, black, mypy, …
 """
 
-from xwlazy.lazy import config_package_lazy_install_enabled
+try:
+    from exonware.xwlazy import config_package_lazy_install_enabled
 
-config_package_lazy_install_enabled("xwformats")
+    config_package_lazy_install_enabled(
+        __package__ or "exonware.xwformats",
+        enabled=True,
+        mode="smart",
+    )
+except ImportError:
+    pass
 
 from .version import (
     __version__,

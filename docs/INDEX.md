@@ -36,6 +36,9 @@ xwformats/
 | [REF_15_API.md](REF_15_API.md) | API reference |
 | [REF_35_REVIEW.md](REF_35_REVIEW.md) | Review summary |
 | [REF_51_TEST.md](REF_51_TEST.md) | Test status |
+| [REF_21_PLAN.md](REF_21_PLAN.md) | Lifecycle / planning pointer |
+| [REF_50_QA.md](REF_50_QA.md) | Quality gates & readiness |
+| [REF_54_BENCH.md](REF_54_BENCH.md) | Benchmarks & performance notes |
 
 ---
 
@@ -54,7 +57,8 @@ xwformats/
 | [_archive/](_archive/) | **Full** KNOWN_ISSUES, CRITICAL_FIXES_APPLIED, XWFORMATS_COMPLETE_FIX_GUIDE |
 | [changes/](changes/) | Short redirects into `_archive/` (keeps deep links aligned with GUIDE_41 `changes/`) |
 | [logs/reviews/](logs/reviews/) | REVIEW_* evidence |
-| [logs/tests/](logs/tests/) | TEST_* summaries (canonical evidence path) |
+| [logs/tests/](logs/tests/) | TEST_* summaries ([INDEX](logs/tests/INDEX.md)) |
+| [logs/feedback/](logs/feedback/) | Feedback routing ([INDEX](logs/feedback/INDEX.md)) |
 | [logs/setup/](logs/setup/) | Platform build notes (e.g. RocksDB on Windows) |
 | [logs/FINAL_COMPLIANCE_REPORT.md](logs/FINAL_COMPLIANCE_REPORT.md) | Compliance report snapshot |
 | [logs/REVIEW_SUMMARY.md](logs/REVIEW_SUMMARY.md) | Review summary (Nov 2025) |
