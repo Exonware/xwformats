@@ -80,6 +80,6 @@ MIT - see [LICENSE](LICENSE).
 - Source validation: 0 async def definitions and 0 await usages under src/.
 - This module still composes with async-capable xw libraries at integration boundaries when needed.
 <!-- async-support:end -->
-Version: 0.9.0.24 | Updated: 31-Mar-2026
+Version: 0.9.0.25 | Updated: 31-Mar-2026
 
 *Built with ❤️ by eXonware.com - Revolutionizing Python Development Since 2025*
