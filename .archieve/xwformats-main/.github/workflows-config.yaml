@@ -1,9 +1,0 @@
-projects:
-  xwformats:
-    repo: xwformats
-    package_main: exonware-xwformats
-    package_wrapper: xwformats
-    python_version: "3.8"
-    has_wrapper: true
-    uses_check_versions: true
-

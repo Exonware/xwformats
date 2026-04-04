@@ -54,6 +54,25 @@ Importing xwformats registers its formats with xwsystem; use xwsystem's codec/fa
 
 ---
 
+## Ecosystem functional contributions
+
+`xwformats` extends format coverage; sibling XW libs provide runtime loading strategy, registration, and downstream consumption layers.
+You can use `xwformats` standalone for broad serializer coverage and conversion tasks.
+Integrating with additional XW libraries is optional and mainly useful for enterprise and mission-critical pipelines that need unified runtime, storage, and query infrastructure.
+
+| Supporting XW lib | What it provides to xwformats | Functional requirement it satisfies |
+|------|----------------|----------------|
+| **XWSystem** | Core codec registry/facade and serializer contracts that xwformats registers into. | One unified serialization API despite many optional format backends. |
+| **XWLazy** | On-demand dependency loading/install behavior for optional format stacks. | Practical deployment of many formats without forcing heavy installs. |
+| **XWData** | Higher-level data transformation workflows that consume xwformats codecs. | Real pipeline usage beyond encode/decode-only primitives. |
+| **XWStorage** | Persistence engine integrations that use specialized format serializers. | Storage interoperability for scientific/schema/database-oriented payloads. |
+| **XWJSON** | Binary JSON and local data-engine flows that can interoperate with format conversion paths. | Efficient local format conversion and transition workflows. |
+| **XWQuery** | Query pipelines over data loaded via format serializers. | End-to-end analytics/transform use cases after format normalization. |
+
+Competitive edge: instead of isolated serializer plugins, `xwformats` plugs into a shared runtime and data stack so advanced formats are immediately usable in storage/query/application workflows.
+
+---
+
 ## Docs and tests
 
 Aligned with project REFs and [docs/GUIDE_01_USAGE.md](docs/GUIDE_01_USAGE.md) (see [GUIDE_63_README](../.docs/guides/GUIDE_63_README.md) in the monorepo).
@@ -80,6 +99,6 @@ MIT - see [LICENSE](LICENSE).
 - Source validation: 0 async def definitions and 0 await usages under src/.
 - This module still composes with async-capable xw libraries at integration boundaries when needed.
 <!-- async-support:end -->
-Version: 0.9.0.25 | Updated: 31-Mar-2026
+Version: 0.9.0.26 | Updated: 04-Apr-2026
 
 *Built with ❤️ by eXonware.com - Revolutionizing Python Development Since 2025*

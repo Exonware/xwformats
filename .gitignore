@@ -61,3 +61,10 @@ Thumbs.db
 .secrets
 .archieve
 .examples/
+
+# Local private folders
+.secrets
+.references
+.venv
+.archive
+

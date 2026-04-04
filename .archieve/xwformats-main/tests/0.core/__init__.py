@@ -1,3 +1,0 @@
-"""
-Core tests for xwformats.
-"""
