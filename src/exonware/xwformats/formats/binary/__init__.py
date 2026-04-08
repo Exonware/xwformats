@@ -3,14 +3,12 @@
 """Enterprise binary serialization formats."""
 
 from .bincode import BincodeSerializer
-from .bson import BsonSerializer
 from .dill import DillSerializer
 from .postcard import PostcardSerializer
 from .ubjson import XWUbjsonSerializer, UbjsonSerializer
 
 __all__ = [
     "BincodeSerializer",
-    "BsonSerializer",
     "DillSerializer",
     "PostcardSerializer",
     "XWUbjsonSerializer",

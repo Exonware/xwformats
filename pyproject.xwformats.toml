@@ -1,4 +1,4 @@
-# Source size (src/*): ~191.1 KB
+# Source size (src/*): ~156.4 KB
 [build-system]
 requires = [
     "hatchling",
@@ -12,9 +12,31 @@ dynamic = [
 ]
 description = "Convenience wrapper for exonware-xwformats - provides 'import xwformats' alias"
 readme = "README.md"
-requires-python = ">=3.8"
-keywords = []
-classifiers = []
+requires-python = ">=3.12"
+keywords = [
+    "serialization",
+    "parquet",
+    "avro",
+    "hdf5",
+    "netcdf",
+    "protobuf",
+    "thrift",
+    "scientific",
+    "enterprise",
+    "formats",
+    "exonware",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering",
+]
 dependencies = [
     "exonware-xwformats",
 ]
@@ -23,17 +45,21 @@ authors = [
 ]
 
 [project.license]
-text = "MIT"
+text = "Apache-2.0"
 
 [project.optional-dependencies]
+# First-party XW libs composed by this package (excludes exonware-xwsystem; see lazy/full).
+xw = [
+    "exonware-xwformats[xw]",
+]
 lazy = [
     "exonware-xwformats[lazy]",
 ]
-dev = [
-    "exonware-xwformats[dev]",
-]
 full = [
     "exonware-xwformats[full]",
+]
+dev = [
+    "exonware-xwformats[dev]",
 ]
 
 [project.urls]

@@ -5,8 +5,8 @@
 **Company:** eXonware.com · **Author:** eXonware Backend Team · **Email:** connect@exonware.com  
 
 [![Status](https://img.shields.io/badge/status-beta-blue.svg)](https://exonware.com)
-[![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
 ---
 
@@ -14,12 +14,12 @@
 
 | Install | What you get | When to use |
 |---------|--------------|-------------|
-| `pip install exonware-xwformats` | **Lite** - `exonware-xwsystem` + `exonware-xwlazy` | Small install; add formats via `[full]` or lazy hooks. |
+| `pip install exonware-xwformats` | **Base** — `exonware-xwsystem[full]` (shared text/JSON stack, etc.) + lazy hooks | Heavier than core-only xwsystem; add `[full]` for extra heavyweight codecs. |
 | `pip install exonware-xwformats[lazy]` | **Lazy** - `xwsystem[lazy]` + lazy extras | Matches lazy-optional stack in docs. |
 | `pip install exonware-xwformats[full]` | **Full** - common format deps installed up front | Production or CI; on **Windows**, LevelDB/RocksDB wheels may be missing (see `docs/REF_54_BENCH.md`). |
 | `pip install exonware-xwformats[dev]` | **Dev** - pytest, black, mypy, … | Contributors |
 
-Base install always pulls **`exonware-xwsystem`** and **`exonware-xwlazy`**. `[lazy]`, `[dev]`, and `[full]` are extras.
+Base install pulls **`exonware-xwsystem[full]`** (CSV, JSON, TOML, YAML, XML, and other xwsystem optionals) and enables **xwlazy** when available. `[lazy]`, `[dev]`, and `[full]` are extras on top.
 
 ---
 
@@ -47,7 +47,7 @@ Importing xwformats registers its formats with xwsystem; use xwsystem's codec/fa
 | **Schema** | Protobuf, Parquet, Thrift, ORC, Cap'n Proto, FlatBuffers, Arrow. **Avro** is optional (may be off default import on some platforms - see `__init__.py` and `docs/_archive/KNOWN_ISSUES.md`). |
 | **Scientific** | HDF5, Feather, Zarr, NetCDF, MAT. |
 | **Database** | LMDB, LevelDB, RocksDB, GraphDB. |
-| **Binary / text** | BSON, UBJSON; CSV, YAML, TOML, XML, RON. |
+| **Binary / text** | **UBJSON**, Bincode, Dill, Postcard, and **RON** are implemented in xwformats. **BSON**, **CSV, JSON, TOML, YAML, XML**, and other core xwsystem binaries are **xwsystem-only** — not registered or exported by xwformats. |
 | **Integration** | Same converter/facade as xwsystem; codec registry updated on import. |
 
 **Lite** = few deps. **Lazy** = optional format wheels on first use. **Full** = common optionals pre-installed. Platform notes (e.g. RocksDB on Windows): [docs/logs/setup/](docs/logs/setup/). Known issues: [docs/_archive/KNOWN_ISSUES.md](docs/_archive/KNOWN_ISSUES.md) and [REF_22_PROJECT.md](docs/REF_22_PROJECT.md#project-status-overview).
@@ -87,7 +87,7 @@ Aligned with project REFs and [docs/GUIDE_01_USAGE.md](docs/GUIDE_01_USAGE.md) (
 
 ## License and links
 
-MIT - see [LICENSE](LICENSE).
+Apache-2.0 - see [LICENSE](LICENSE).
 
 - **Homepage:** https://exonware.com  
 - **Repository:** https://github.com/exonware/xwformats  
@@ -99,6 +99,6 @@ MIT - see [LICENSE](LICENSE).
 - Source validation: 0 async def definitions and 0 await usages under src/.
 - This module still composes with async-capable xw libraries at integration boundaries when needed.
 <!-- async-support:end -->
-Version: 0.9.0.26 | Updated: 04-Apr-2026
+Version: 0.9.0.27 | Updated: 08-Apr-2026
 
 *Built with ❤️ by eXonware.com - Revolutionizing Python Development Since 2025*

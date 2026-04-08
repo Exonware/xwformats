@@ -10,7 +10,7 @@ Requirements and project status (output of GUIDE_22_PROJECT). Per REF_35_REVIEW.
 
 ## Vision
 
-xwformats provides **advanced, less-common, or dependency-heavy serialization formats** (text, binary, archive, image, media, video, etc.) in a separate package from xwsystem so the core stays lean and only consumers who need these formats install them. It delivers schema (Protobuf, Avro, Parquet, Thrift, ORC, Cap'n Proto, FlatBuffers), scientific (HDF5, Feather, Zarr, NetCDF, MAT), database (LMDB, LevelDB, RocksDB, GraphDB), binary (BSON, UBJSON), text (XML, RON, TOML, YAML, CSV), integrates with xwsystem converter/facade for format conversion and Firebase replacement (storage/serialization), and supports broader categories (archive, image, media, video) aligned with xwsystem.
+xwformats provides **advanced, less-common, or dependency-heavy serialization formats** (binary, schema, scientific, database, etc.). **CSV, JSON, TOML, YAML, and XML** are **only** in **xwsystem** (`exonware.xwsystem.io.serialization.formats.text`); xwformats does **not** register them. **RON** is the only text codec shipped and registered from xwformats. The package delivers schema (Protobuf, Avro, Parquet, Thrift, ORC, Cap'n Proto, FlatBuffers), scientific (HDF5, Feather, Zarr, NetCDF, MAT), database (LMDB, LevelDB, RocksDB, GraphDB), binary (UBJSON, Bincode, Dill, Postcard; **BSON** and other core binaries stay in **xwsystem**), integrates with xwsystem converter/facade where formats overlap, and supports broader categories (archive, image, media, video) aligned with xwsystem.
 
 ---
 
@@ -39,7 +39,7 @@ xwformats provides **advanced, less-common, or dependency-heavy serialization fo
 | FR-001 | Schema formats (Protobuf, Avro, Parquet, Thrift, ORC, Cap'n Proto, FlatBuffers) | High | Done |
 | FR-002 | Scientific formats (HDF5, Feather, Zarr, NetCDF, MAT) | High | Done |
 | FR-003 | Database formats (LMDB, LevelDB, RocksDB, GraphDB) | Medium | Done |
-| FR-004 | Binary (BSON, UBJSON) and text (XML, RON, TOML, YAML, CSV) | High | Done |
+| FR-004 | Binary (UBJSON, Bincode, Dill, Postcard in xwformats); **BSON** and core xwsystem binaries not registered here; text **RON** in xwformats; CSV/JSON/TOML/YAML/XML remain xwsystem-only | High | Done |
 | FR-005 | Converter/facade integration with xwsystem | High | Done |
 | FR-006 | Lite/lazy/full install modes; xwlazy support required | High | Done |
 | FR-007 | Auto-detection: importing xwformats (or xwjson) registers extension support with codec/facade (xwcodec, xwfile, xwserialization) | High | Done |

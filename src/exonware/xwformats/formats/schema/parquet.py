@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.26
+Version: 0.9.0.27
 Generation Date: November 2, 2025
 
 Parquet serialization - Apache Parquet columnar storage format.
@@ -16,13 +16,13 @@ Following I→A→XW pattern:
 import io
 from typing import Any
 
+import pyarrow as pa
+import pyarrow.parquet as pq
+
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
 from exonware.xwsystem.io.defs import CodecCapability
 from exonware.xwsystem.io.errors import SerializationError
-
-import pyarrow as pa
-import pyarrow.parquet as pq
 
 
 class XWParquetSerializer(ASerialization):

@@ -56,39 +56,21 @@ def test_import_scientific_formats():
 def test_import_database_formats():
     """Test that database formats can be imported."""
     from exonware.xwformats.formats.database import (
-        LmdbSerializer,
         GraphDbSerializer,
         LeveldbSerializer,
-        RocksdbSerializer,  # May be None if compilation failed
+        LmdbSerializer,
+        RocksdbSerializer,
     )
-    # Verify core database formats work
     assert LmdbSerializer is not None
     assert GraphDbSerializer is not None
     assert LeveldbSerializer is not None
-    # RocksDB is optional - requires compilation and may not be available on Windows
-    # Tests that require RocksDB use pytest.importorskip("rocksdb")
-    if RocksdbSerializer is None:
-        # RocksDB not available (compilation required) - this is expected on some platforms
-        import warnings
-        warnings.warn("RocksDB not available (requires compilation, may not work on Windows without build tools)")
-    else:
-        assert RocksdbSerializer is not None
+    assert RocksdbSerializer is not None
 @pytest.mark.xwformats_core
 
 def test_import_text_formats():
-    """Test that text formats can be imported."""
-    from exonware.xwformats.formats.text import (
-        CsvSerializer,
-        YamlSerializer,
-        TomlSerializer,
-        XmlSerializer,
-        RonSerializer,
-    )
-    # Verify imports work
-    assert CsvSerializer is not None
-    assert YamlSerializer is not None
-    assert TomlSerializer is not None
-    assert XmlSerializer is not None
+    """xwformats text package exposes RON only; other text codecs are xwsystem."""
+    from exonware.xwformats.formats.text import RonSerializer
+
     assert RonSerializer is not None
 @pytest.mark.xwformats_core
 
@@ -188,8 +170,10 @@ def test_facade_list_formats_after_import():
     assert isinstance(formats, list)
     assert len(formats) > 0
     # At least one known xwformats codec should be present (core formats always registered)
-    known_xwformats = {"parquet", "protobuf", "ubjson", "yaml", "csv", "toml", "xml"}
-    assert known_xwformats.intersection(formats), f"Expected some of {known_xwformats} in list_formats(), got {formats[:20]}..."
+    known_xwformats = {"parquet", "protobuf", "ubjson", "ron"}
+    assert known_xwformats.intersection(
+        set(formats)
+    ), f"Expected some of {known_xwformats} in list_formats(), got {formats[:20]}..."
 @pytest.mark.xwformats_core
 
 def test_facade_get_serializer_returns_codec():
@@ -208,8 +192,8 @@ def test_auto_detection_extensions_after_import():
     import exonware.xwformats  # noqa: F401
     registry = get_registry()
     exts = registry.list_extensions()
-    # xwformats adds e.g. .parquet, .ubjson, .yaml, .csv
-    expected_extensions = {".parquet", ".ubjson", ".yaml", ".csv", ".toml", ".xml"}
+    # xwformats adds e.g. .parquet, .ubjson, .ron (not .yaml/.csv — those come from xwsystem if registered there)
+    expected_extensions = {".parquet", ".ubjson", ".ron"}
     found = expected_extensions.intersection(exts)
     assert found, f"Expected some of {expected_extensions} in registry.list_extensions() after import, got sample: {list(exts)[:30]}"
 if __name__ == "__main__":

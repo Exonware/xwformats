@@ -5,7 +5,7 @@ that imports from 'exonware-xwformats'. Install the full package as a dependency
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.26
+Version: 0.9.0.27
 """
 # Import everything from the full package
 

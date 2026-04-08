@@ -5,8 +5,6 @@ Unit tests for NetCDF serializer in xwformats.
 
 import pytest
 
-pytest.importorskip("netCDF4")
-
 from exonware.xwformats.formats.scientific import XWNetcdfSerializer
 
 

@@ -28,11 +28,11 @@ xwformats/
 +-- config.py          # Configuration
 +-- version.py
 +-- formats/
-    +-- binary/        # BSON, UBJSON, bincode, dill, postcard
+    +-- binary/        # UBJSON, bincode, dill, postcard (BSON → xwsystem)
     +-- database/      # LMDB, LevelDB, RocksDB, GraphDB
     +-- schema/        # Protobuf, Avro, Parquet, Thrift, ORC, Cap'n Proto, FlatBuffers, Arrow
     +-- scientific/    # HDF5, Feather, Zarr, NetCDF, MAT
-    +-- text/          # XML, RON, TOML, YAML, CSV
+    +-- text/          # RON only (ron.py). CSV/JSON/TOML/YAML/XML: use xwsystem only (not registered by xwformats)
 ```
 
 ---

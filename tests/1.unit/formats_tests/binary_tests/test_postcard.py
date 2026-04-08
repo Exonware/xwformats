@@ -13,12 +13,14 @@ Email: connect@exonware.com
 """
 
 from __future__ import annotations
+
 import pytest
-pytest.importorskip("pypostcard")
+
 from exonware.xwformats.formats.binary import PostcardSerializer
 from exonware.xwsystem.io.errors import SerializationError
-@pytest.mark.xwformats_unit
 
+
+@pytest.mark.xwformats_unit
 class TestPostcardSerializer:
     """Unit tests for Postcard serializer."""
 

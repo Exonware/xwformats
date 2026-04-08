@@ -2,10 +2,11 @@
 # Canonical source: pyproject.toml (GUIDE_42_CONFIG_PY). Regenerate with repo update_config when available.
 #
 # Base runtime (matches [project.dependencies]):
-# Source size (src/*): ~191.1 KB
+# Source size (src/*): ~156.4 KB
 exonware-xwlazy
 exonware-xwsystem
 #
 # Full format stack: pip install "exonware-xwformats[full]" (see optional-dependencies in pyproject.toml).
 # Dev tools: pip install "exonware-xwformats[dev]"
 ron
+google

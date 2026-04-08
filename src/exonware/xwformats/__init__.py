@@ -10,35 +10,34 @@ specialized domains (scientific computing, big data, enterprise systems).
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.26
+Version: 0.9.0.27
 Generation Date: 02-Nov-2025
 
 Formats provided:
 - Schema: Protobuf, Avro, Parquet, Thrift, ORC, Cap'n Proto, FlatBuffers
 - Scientific: HDF5, Feather, Zarr, NetCDF, MAT
 - Database: LMDB, GraphDB, LevelDB
-- Binary: BSON, UBJSON
-- Text: XML (reserved)
+- Binary: UBJSON, Bincode, Dill, Postcard (xwformats). **BSON** (and MsgPack, CBOR, …) live in **xwsystem** — not registered or exported from xwformats
+- Text: **RON** only in xwformats. CSV, JSON, TOML, YAML, XML live in **xwsystem**
+  (``exonware.xwsystem.io.serialization.formats.text``); import/register them from
+  there — xwformats does **not** add them to the shared registry.
 
-Total: 17 enterprise formats (~87 MB dependencies)
+Total: 17+ enterprise formats (~87 MB dependencies with xwsystem[full])
 
 Installation:
-    pip install exonware-xwformats              # lite: xwsystem + xwlazy
+    pip install exonware-xwformats              # pulls exonware-xwsystem[full] (TOML/YAML/XML/JSON stack, etc.)
     pip install exonware-xwformats[lazy]        # lazy stack
-    pip install exonware-xwformats[full]        # format backends (see pyproject.toml)
+    pip install exonware-xwformats[full]        # extra heavyweight format backends (see pyproject.toml)
     pip install exonware-xwformats[dev]         # pytest, black, mypy, …
 """
 
-try:
-    from exonware.xwlazy import config_package_lazy_install_enabled
+from exonware.xwlazy import config_package_lazy_install_enabled
 
-    config_package_lazy_install_enabled(
-        __package__ or "exonware.xwformats",
-        enabled=True,
-        mode="smart",
-    )
-except ImportError:
-    pass
+config_package_lazy_install_enabled(
+    __package__ or "exonware.xwformats",
+    enabled=True,
+    mode="smart",
+)
 
 from .version import (
     __version__,
@@ -81,21 +80,14 @@ from .formats.database import (
 )
 from .formats.binary import (
     BincodeSerializer,
-    BsonSerializer,
     DillSerializer,
     PostcardSerializer,
     XWUbjsonSerializer,
 )
-from .formats.text import (
-    CsvSerializer,
-    RonSerializer,
-    TomlSerializer,
-    XmlSerializer,
-    YamlSerializer,
-)
+from .formats.text import RonSerializer
 
 
-# Register all serializers
+# Register all serializers (xwformats-owned only; xwsystem text codecs are separate)
 for _serializer_class in [
     # Schema formats (Avro excluded — see docs/_archive/KNOWN_ISSUES.md)
     XWProtobufSerializer,
@@ -118,16 +110,10 @@ for _serializer_class in [
     RocksdbSerializer,
     # Binary formats
     BincodeSerializer,
-    BsonSerializer,
     DillSerializer,
     PostcardSerializer,
     XWUbjsonSerializer,
-    # Text formats
-    CsvSerializer,
     RonSerializer,
-    TomlSerializer,
-    XmlSerializer,
-    YamlSerializer,
 ]:
     _codec_registry.register(_serializer_class)
 

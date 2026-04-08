@@ -38,7 +38,7 @@ xwformats provides **advanced, less-common, or dependency-heavy serialization fo
 
 **Problem:** xwsystem must stay lean; heavyweight formats (Protobuf, Parquet, HDF5, LMDB, etc.) need a dedicated home with optional deps.
 
-**Proposed Solution:** xwformats as single-responsibility library: schema (Protobuf, Avro, Parquet, Thrift, ORC, Cap'n Proto, FlatBuffers), scientific (HDF5, Feather, Zarr, NetCDF, MAT), database (LMDB, LevelDB, RocksDB, GraphDB), binary (BSON, UBJSON), text (XML, RON, TOML, YAML, CSV).
+**Proposed Solution:** xwformats as single-responsibility library: schema (Protobuf, Avro, Parquet, Thrift, ORC, Cap'n Proto, FlatBuffers), scientific (HDF5, Feather, Zarr, NetCDF, MAT), database (LMDB, LevelDB, RocksDB, GraphDB), binary (UBJSON, Bincode, Dill, Postcard). **Text:** **RON** in xwformats only; CSV, JSON, TOML, YAML, XML, **BSON**, and other core xwsystem codecs stay in **xwsystem** (not registered by xwformats).
 
 **Outcome:** Implemented; lite/lazy/full install modes; converter/facade integration with xwsystem. See REF_22_PROJECT FR-001–FR-006.
 

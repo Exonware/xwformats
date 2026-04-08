@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.26
+Version: 0.9.0.27
 Generation Date: 07-Jan-2025
 RocksDB Serialization - High-Performance Key-Value Store
 RocksDB is a persistent key-value store for fast storage based on a log-structured
@@ -29,34 +29,39 @@ from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
 from exonware.xwsystem.io.defs import CodecCapability
 from exonware.xwsystem.io.errors import SerializationError
-# Try importing rocksdb - multiple package names for compatibility
-_ROCKSDB_AVAILABLE = False
+
 try:
-    import rocksdb
-    # Verify it's a real rocksdb module with DB class
-    if hasattr(rocksdb, 'DB') and hasattr(rocksdb, 'Options'):
-        _ROCKSDB_AVAILABLE = True
+    import rocksdb as _rocksdb_mod
 except ImportError:
-    # Try alternative package names
+    _rocksdb_mod = None  # type: ignore[assignment, misc]
+
+_has_native_rocksdb = False
+if _rocksdb_mod is not None:
+    # Lazy-import shims (e.g. xwlazy) may succeed at `import rocksdb` but fail
+    # when attributes are resolved; treat that as "no native binding".
     try:
-        import rocksdb3 as rocksdb
-        if hasattr(rocksdb, 'DB') and hasattr(rocksdb, 'Options'):
-            _ROCKSDB_AVAILABLE = True
-    except ImportError:
-        rocksdb = None  # type: ignore
-if not _ROCKSDB_AVAILABLE:
-    # Pure Python fallback implementation - mimics RocksDB interface
+        _has_native_rocksdb = hasattr(_rocksdb_mod, "DB") and hasattr(
+            _rocksdb_mod, "Options"
+        )
+    except (ImportError, ModuleNotFoundError, OSError):
+        _has_native_rocksdb = False
+
+if _has_native_rocksdb:
+    rocksdb = _rocksdb_mod
+else:
+    # Pure Python fallback (e.g. Windows or env without python-rocksdb): JSON-backed KV store.
     from exonware.xwsystem.io.serialization.formats.text.json import dump, load, loads
-    import os
     from pathlib import Path as _Path
+
     class CompressionType:
-        snappy_compression = 'snappy'
-        zlib_compression = 'zlib'
-        bzip2_compression = 'bzip2'
-        lz4_compression = 'lz4'
-        lz4hc_compression = 'lz4hc'
-        zstd_compression = 'zstd'
-        no_compression = 'none'
+        snappy_compression = "snappy"
+        zlib_compression = "zlib"
+        bzip2_compression = "bzip2"
+        lz4_compression = "lz4"
+        lz4hc_compression = "lz4hc"
+        zstd_compression = "zstd"
+        no_compression = "none"
+
     class Options:
         def __init__(self):
             self.create_if_missing = True
@@ -66,97 +71,102 @@ if not _ROCKSDB_AVAILABLE:
             self.max_write_buffer_number = 3
             self.target_file_size_base = 67108864
             self.compression = CompressionType.no_compression
+
     class WriteOptions:
         def __init__(self):
             self.sync = True
+
     class ReadOptions:
         def __init__(self):
             self.fill_cache = True
             self.verify_checksums = False
+
     class WriteBatch:
         def __init__(self):
             self._ops = []
+
         def put(self, key: bytes, value: bytes):
-            self._ops.append(('put', key, value))
+            self._ops.append(("put", key, value))
+
         def delete(self, key: bytes):
-            self._ops.append(('delete', key))
+            self._ops.append(("delete", key))
+
         def clear(self):
             self._ops.clear()
+
         def __iter__(self):
             return iter(self._ops)
+
     class DB:
-        """Pure Python RocksDB-compatible implementation using JSON files."""
+        """Pure Python RocksDB-shaped implementation using JSON files."""
+
         def __init__(self, path: str, options: Options):
             self.path = _Path(path)
             self.options = options
-            self.data_file = self.path / 'data.json'
-            self.keys_file = self.path / 'keys.json'  # Store key type info separately
-            self._data = {}
-            self._key_types = {}  # Track original key types
+            self.data_file = self.path / "data.json"
+            self.keys_file = self.path / "keys.json"
+            self._data: dict[str, bytes] = {}
+            self._key_types: dict[str, str] = {}
             if self.options.create_if_missing:
                 self.path.mkdir(parents=True, exist_ok=True)
             if self.data_file.exists():
                 try:
-                    with open(self.data_file, 'rb') as f:
-                        content = f.read().decode('utf-8')
+                    with open(self.data_file, "rb") as f:
+                        content = f.read().decode("utf-8")
                         data_dict = loads(content)
                         self._data = {k: bytes.fromhex(v) for k, v in data_dict.items()}
-                    # Load key type information if available
                     if self.keys_file.exists():
-                        with open(self.keys_file, 'r') as f:
+                        with open(self.keys_file, "r") as f:
                             self._key_types = load(f)
                 except Exception:
                     self._data = {}
                     self._key_types = {}
+
         def put(self, key: bytes, value: bytes):
-            """Put key-value pair."""
             key_hex = key.hex()
             self._data[key_hex] = value
-            # Store key type info (for proper deserialization)
-            # Detect if key is UTF-8 decodable (likely a string originally)
             try:
-                decoded = key.decode('utf-8')
-                # If round-trip works, it's a string key
-                if decoded.encode('utf-8') == key:
-                    self._key_types[key_hex] = 'str'
+                decoded = key.decode("utf-8")
+                if decoded.encode("utf-8") == key:
+                    self._key_types[key_hex] = "str"
                 else:
-                    self._key_types[key_hex] = 'bytes'
+                    self._key_types[key_hex] = "bytes"
             except UnicodeDecodeError:
-                self._key_types[key_hex] = 'bytes'
+                self._key_types[key_hex] = "bytes"
             self._save()
+
         def get(self, key: bytes, read_opts=None):
-            """Get value by key."""
-            key_hex = key.hex()
-            return self._data.get(key_hex)
+            return self._data.get(key.hex())
+
         def delete(self, key: bytes, write_opts=None):
-            """Delete key."""
             key_hex = key.hex()
             if key_hex in self._data:
                 del self._data[key_hex]
                 self._save()
+
         def write(self, batch: WriteBatch, write_opts: WriteOptions = None):
-            """Write batch operations."""
             for op in batch:
-                if op[0] == 'put':
+                if op[0] == "put":
                     _, key, value = op
                     self.put(key, value)
-                elif op[0] == 'delete':
+                elif op[0] == "delete":
                     _, key = op
                     self.delete(key)
             if write_opts and write_opts.sync:
                 self._save()
+
         def iteritems(self):
-            """Return iterator over key-value pairs."""
             class _Iterator:
-                def __init__(self, db_instance):
-                    # Store reference to DB to access key_types
-                    self.db = db_instance
+                def __init__(self, db_instance: "DB"):
                     self.items = list(db_instance._data.items())
                     self.idx = 0
+
                 def seek_to_first(self):
                     self.idx = 0
+
                 def __iter__(self):
                     return self
+
                 def __next__(self):
                     if self.idx >= len(self.items):
                         raise StopIteration
@@ -164,18 +174,18 @@ if not _ROCKSDB_AVAILABLE:
                     key_bytes = bytes.fromhex(key_hex)
                     self.idx += 1
                     return (key_bytes, value_bytes)
+
             return _Iterator(self)
+
         def _save(self):
-            """Save data to file."""
             if self.options.create_if_missing:
                 self.path.mkdir(parents=True, exist_ok=True)
             data_dict = {k: v.hex() for k, v in self._data.items()}
-            with open(self.data_file, 'w') as f:
+            with open(self.data_file, "w") as f:
                 dump(data_dict, f)
-            # Save key type information
-            with open(self.keys_file, 'w') as f:
+            with open(self.keys_file, "w") as f:
                 dump(self._key_types, f)
-    # Create module-like object
+
     class _RocksDBModule:
         DB = DB
         Options = Options
@@ -183,8 +193,8 @@ if not _ROCKSDB_AVAILABLE:
         WriteOptions = WriteOptions
         ReadOptions = ReadOptions
         CompressionType = CompressionType
-    rocksdb = _RocksDBModule()  # type: ignore
-    _ROCKSDB_AVAILABLE = True  # Pure Python implementation is always available
+
+    rocksdb = _RocksDBModule()  # type: ignore[assignment, misc]
 
 
 class RocksdbSerializer(ASerialization):
@@ -193,7 +203,9 @@ class RocksdbSerializer(ASerialization):
     I: ISerialization (interface)
     A: ASerialization (abstract base)
     XW: RocksdbSerializer (concrete implementation)
-    Uses python-rocksdb library for RocksDB operations.
+    Uses ``python-rocksdb`` when importable (typical on Linux/macOS with the extra
+    installed); otherwise a pure-Python JSON-backed store with the same surface API
+    (typical on Windows).
     RocksDB provides:
     - High-performance key-value storage
     - LSM-tree structure for fast writes
@@ -216,7 +228,6 @@ class RocksdbSerializer(ASerialization):
         super().__init__()
         # Thread-local storage for database instances
         self._local = threading.local()
-        # Note: Uses pure Python fallback if native python-rocksdb is not available
     @property
 
     def codec_id(self) -> str:

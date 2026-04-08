@@ -5,8 +5,6 @@ Unit tests for UBJSON serializer in xwformats.
 
 import pytest
 
-pytest.importorskip("ubjson")
-
 from exonware.xwformats.formats.binary import XWUbjsonSerializer
 
 

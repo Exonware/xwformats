@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.26
+Version: 0.9.0.27
 Generation Date: 02-Nov-2025
 
 LevelDB Serialization - Google's Fast Key-Value Store
@@ -26,10 +26,22 @@ from typing import Any
 from pathlib import Path
 import pickle
 
-try:  # Optional dependency: may be unavailable on some platforms
-    import plyvel  # type: ignore[import]
-except ImportError:  # pragma: no cover - exercised via environment without plyvel
-    plyvel = None  # type: ignore[assignment]
+try:
+    import plyvel as _plyvel_mod  # type: ignore[import]
+except ImportError:
+    _plyvel_mod = None  # type: ignore[assignment, misc]
+
+_plyvel_usable = False
+if _plyvel_mod is not None:
+    try:
+        _plyvel_usable = hasattr(_plyvel_mod, "DB")
+    except (ImportError, ModuleNotFoundError, OSError):
+        _plyvel_usable = False
+
+if _plyvel_usable:
+    plyvel = _plyvel_mod
+else:
+    plyvel = None  # type: ignore[assignment, misc]
 
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.errors import SerializationError
@@ -43,8 +55,9 @@ class XWLeveldbSerializer(ASerialization):
     A: ASerialization (abstract base)
     XW: XWLeveldbSerializer (concrete implementation)
     
-    Note: plyvel requires C++ build tools on Windows. If installation fails,
-    install exonware-xwformats[full] excluding plyvel, or use other database formats.
+    In-memory ``encode``/``decode`` work without native LevelDB.
+    ``encode_to_file``/``decode_from_file`` require ``plyvel`` (Linux/macOS; install
+    per platform — not bundled on Windows).
     """
     
     def __init__(self):
@@ -109,18 +122,18 @@ class XWLeveldbSerializer(ASerialization):
         """
         if not isinstance(data, dict):
             raise SerializationError(f"LevelDB expects dict, got {type(data)}")
-        
-        opts = options or {}
-        create_if_missing = opts.get('create_if_missing', True)
-        
+
         if plyvel is None:
             raise SerializationError(
-                "LevelDB support requires the 'plyvel' package with native LevelDB "
-                "libraries installed. Install system-level LevelDB and the plyvel "
-                "wheel to use XWLeveldbSerializer."
+                "LevelDB file operations require the 'plyvel' package and native "
+                "LevelDB libraries (typically Linux/macOS). On Windows, use "
+                "encode/decode for in-memory pickled dicts only.",
+                self.format_name,
             )
 
-        # Open LevelDB database
+        opts = options or {}
+        create_if_missing = opts.get('create_if_missing', True)
+
         db = plyvel.DB(str(file_path), create_if_missing=create_if_missing)
         
         try:
@@ -147,9 +160,10 @@ class XWLeveldbSerializer(ASerialization):
         """
         if plyvel is None:
             raise SerializationError(
-                "LevelDB support requires the 'plyvel' package with native LevelDB "
-                "libraries installed. Install system-level LevelDB and the plyvel "
-                "wheel to use XWLeveldbSerializer."
+                "LevelDB file operations require the 'plyvel' package and native "
+                "LevelDB libraries (typically Linux/macOS). On Windows, use "
+                "encode/decode for in-memory pickled dicts only.",
+                self.format_name,
             )
 
         db = plyvel.DB(str(file_path), create_if_missing=False)

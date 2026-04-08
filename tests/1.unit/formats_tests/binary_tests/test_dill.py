@@ -13,12 +13,14 @@ Email: connect@exonware.com
 """
 
 from __future__ import annotations
+
 import pytest
-pytest.importorskip("dill")
+
 from exonware.xwformats.formats.binary import DillSerializer
 from exonware.xwsystem.io.errors import SerializationError
-@pytest.mark.xwformats_unit
 
+
+@pytest.mark.xwformats_unit
 class TestDillSerializer:
     """Unit tests for Dill serializer."""
 

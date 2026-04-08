@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.26
+Version: 0.9.0.27
 Generation Date: 07-Jan-2025
 RON Serialization - Rusty Object Notation
 RON is a human-readable data serialization format with Rust-like syntax:
@@ -27,167 +27,129 @@ Priority 5 (Extensibility): Support complex Rust data structures
 
 from typing import Any
 from pathlib import Path
-# RON library - Try external packages first, then use built-in implementation
-# External packages: python-ron (if available), otherwise use built-in parser
-_RON_AVAILABLE = False
-_USE_EXTERNAL = False
-try:
-    # Try python-ron package first (correct package name from PyPI)
-    try:
-        import python_ron as ron
-        if hasattr(ron, 'dumps') and hasattr(ron, 'loads'):
-            _RON_AVAILABLE = True
-            _USE_EXTERNAL = True
-    except ImportError:
-        pass
-    # If python-ron not available, try ron (might exist as namespace package)
-    if not _RON_AVAILABLE:
-        try:
-            import ron
-            if hasattr(ron, 'dumps') and hasattr(ron, 'loads'):
-                _RON_AVAILABLE = True
-                _USE_EXTERNAL = True
-        except ImportError:
-            pass
-except (ImportError, AttributeError):
-    pass
-# If no external library available, use built-in RON parser
-if not _RON_AVAILABLE:
-    _RON_AVAILABLE = True  # Built-in parser is always available
-    _USE_EXTERNAL = False
-    # Built-in RON parser implementation
-    from exonware.xwsystem.io.serialization.formats.text.json import (
-        JSONDecodeError,
-        dumps,
-        loads,
-    )
-    import re
 
-    class _BuiltinRon:
-        """Built-in RON parser for basic RON syntax support."""
-        @staticmethod
-        def dumps(obj: Any, **kwargs) -> str:
-            """
-            Serialize Python object to RON format.
-            Supports: dict, list, tuple, str, int, float, bool, None
-            """
-            if obj is None:
-                return "null"
-            elif isinstance(obj, bool):
-                return "true" if obj else "false"
-            elif isinstance(obj, (int, float)):
-                return str(obj)
-            elif isinstance(obj, str):
-                # Escape strings properly for RON
-                escaped = obj.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n')
-                return f'"{escaped}"'
-            elif isinstance(obj, (list, tuple)):
-                items = ', '.join(_BuiltinRon.dumps(item) for item in obj)
-                return f'[{items}]'
-            elif isinstance(obj, dict):
-                items = []
-                for key, value in obj.items():
-                    key_str = f'"{key}"' if isinstance(key, str) else str(key)
-                    value_str = _BuiltinRon.dumps(value)
-                    items.append(f'{key_str}: {value_str}')
-                return f'({", ".join(items)})'
-            else:
-                # Fallback to JSON for unknown types
-                json_str = dumps(obj)
-                return json_str
-        @staticmethod
-        def loads(s: str) -> Any:
-            """
-            Parse RON string to Python object.
-            Basic parser that handles common RON syntax patterns.
-            """
-            s = s.strip()
-            # Handle null
-            if s == 'null' or s == 'None':
-                return None
-            # Handle booleans
-            if s == 'true':
-                return True
-            if s == 'false':
-                return False
-            # Handle numbers
-            try:
-                if '.' in s:
-                    return float(s)
-                return int(s)
-            except ValueError:
-                pass
-            # Handle strings
-            if s.startswith('"') and s.endswith('"'):
-                # Unescape string
-                content = s[1:-1]
-                content = content.replace('\\"', '"').replace('\\\\', '\\').replace('\\n', '\n')
-                return content
-            # Handle lists/arrays [item1, item2, ...]
-            if s.startswith('[') and s.endswith(']'):
-                content = s[1:-1].strip()
-                if not content:
-                    return []
-                # Simple comma-split (doesn't handle nested structures perfectly, but works for basic cases)
-                items = []
-                current = []
-                depth = 0
-                for char in content:
-                    if char in '[({':
-                        depth += 1
-                        current.append(char)
-                    elif char in '])}':
-                        depth -= 1
-                        current.append(char)
-                    elif char == ',' and depth == 0:
-                        items.append(''.join(current).strip())
-                        current = []
-                    else:
-                        current.append(char)
-                if current:
-                    items.append(''.join(current).strip())
-                return [_BuiltinRon.loads(item.strip()) for item in items if item.strip()]
-            # Handle maps/structs (key: value, key2: value2) or {key: value, ...}
-            if (s.startswith('(') and s.endswith(')')) or (s.startswith('{') and s.endswith('}')):
-                content = s[1:-1].strip()
-                if not content:
-                    return {}
-                result = {}
-                # Parse key: value pairs
-                pairs = []
-                current = []
-                depth = 0
-                for char in content:
-                    if char in '[({':
-                        depth += 1
-                        current.append(char)
-                    elif char in '])}':
-                        depth -= 1
-                        current.append(char)
-                    elif char == ',' and depth == 0:
-                        pairs.append(''.join(current).strip())
-                        current = []
-                    else:
-                        current.append(char)
-                if current:
-                    pairs.append(''.join(current).strip())
-                for pair in pairs:
-                    if ':' in pair:
-                        key_part, value_part = pair.split(':', 1)
-                        key = _BuiltinRon.loads(key_part.strip())
-                        value = _BuiltinRon.loads(value_part.strip())
-                        result[key] = value
-                return result
-            # Fallback to JSON parsing
-            try:
-                return loads(s)
-            except JSONDecodeError:
-                raise ValueError(f"Unable to parse RON string: {s[:50]}...")
-    ron = _BuiltinRon()
+from exonware.xwsystem.io.serialization.formats.text.json import (
+    JSONDecodeError,
+    dumps,
+    loads,
+)
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
 from exonware.xwsystem.io.defs import CodecCapability
 from exonware.xwsystem.io.errors import SerializationError
+
+
+class _BuiltinRon:
+    """Built-in RON parser for basic RON syntax support."""
+
+    @staticmethod
+    def dumps(obj: Any, **kwargs) -> str:
+        """
+        Serialize Python object to RON format.
+        Supports: dict, list, tuple, str, int, float, bool, None
+        """
+        if obj is None:
+            return "null"
+        if isinstance(obj, bool):
+            return "true" if obj else "false"
+        if isinstance(obj, (int, float)):
+            return str(obj)
+        if isinstance(obj, str):
+            escaped = obj.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n')
+            return f'"{escaped}"'
+        if isinstance(obj, (list, tuple)):
+            items = ', '.join(_BuiltinRon.dumps(item) for item in obj)
+            return f'[{items}]'
+        if isinstance(obj, dict):
+            items = []
+            for key, value in obj.items():
+                key_str = f'"{key}"' if isinstance(key, str) else str(key)
+                value_str = _BuiltinRon.dumps(value)
+                items.append(f'{key_str}: {value_str}')
+            return f'({", ".join(items)})'
+        return dumps(obj)
+
+    @staticmethod
+    def loads(s: str) -> Any:
+        """
+        Parse RON string to Python object.
+        Basic parser that handles common RON syntax patterns.
+        """
+        s = s.strip()
+        if s == 'null' or s == 'None':
+            return None
+        if s == 'true':
+            return True
+        if s == 'false':
+            return False
+        try:
+            if '.' in s:
+                return float(s)
+            return int(s)
+        except ValueError:
+            pass
+        if s.startswith('"') and s.endswith('"'):
+            content = s[1:-1]
+            content = content.replace('\\"', '"').replace('\\\\', '\\').replace('\\n', '\n')
+            return content
+        if s.startswith('[') and s.endswith(']'):
+            content = s[1:-1].strip()
+            if not content:
+                return []
+            items = []
+            current = []
+            depth = 0
+            for char in content:
+                if char in '[({':
+                    depth += 1
+                    current.append(char)
+                elif char in '])}':
+                    depth -= 1
+                    current.append(char)
+                elif char == ',' and depth == 0:
+                    items.append(''.join(current).strip())
+                    current = []
+                else:
+                    current.append(char)
+            if current:
+                items.append(''.join(current).strip())
+            return [_BuiltinRon.loads(item.strip()) for item in items if item.strip()]
+        if (s.startswith('(') and s.endswith(')')) or (s.startswith('{') and s.endswith('}')):
+            content = s[1:-1].strip()
+            if not content:
+                return {}
+            result: dict[Any, Any] = {}
+            pairs = []
+            current = []
+            depth = 0
+            for char in content:
+                if char in '[({':
+                    depth += 1
+                    current.append(char)
+                elif char in '])}':
+                    depth -= 1
+                    current.append(char)
+                elif char == ',' and depth == 0:
+                    pairs.append(''.join(current).strip())
+                    current = []
+                else:
+                    current.append(char)
+            if current:
+                pairs.append(''.join(current).strip())
+            for pair in pairs:
+                if ':' in pair:
+                    key_part, value_part = pair.split(':', 1)
+                    key = _BuiltinRon.loads(key_part.strip())
+                    value = _BuiltinRon.loads(value_part.strip())
+                    result[key] = value
+            return result
+        try:
+            return loads(s)
+        except JSONDecodeError:
+            raise ValueError(f"Unable to parse RON string: {s[:50]}...")
+
+
+ron = _BuiltinRon()
 
 
 class RonSerializer(ASerialization):
@@ -196,7 +158,7 @@ class RonSerializer(ASerialization):
     I: ISerialization (interface)
     A: ASerialization (abstract base)
     XW: RonSerializer (concrete implementation)
-    Uses python-ron library for RON format support.
+    Uses the built-in RON subset implementation (dumps/loads).
     Examples:
         >>> serializer = RonSerializer()
         >>> 
@@ -275,20 +237,8 @@ class RonSerializer(ASerialization):
         Returns:
             RON-encoded string
         Raises:
-            SerializationError: If encoding fails or RON library not available
+            SerializationError: If encoding fails
         """
-        if not _RON_AVAILABLE:
-            raise SerializationError(
-                "RON library not available. RON format requires manual installation. "
-                "See: https://github.com/ron-rs/ron",
-                format_name=self.format_name
-            )
-        if not _RON_AVAILABLE:
-            raise SerializationError(
-                "RON library not available. RON format requires manual installation. "
-                "See: https://github.com/ron-rs/ron",
-                format_name=self.format_name
-            )
         try:
             opts = options or {}
             # Use ron.dumps (works for both external and built-in implementations)
@@ -312,14 +262,8 @@ class RonSerializer(ASerialization):
         Returns:
             Decoded Python data
         Raises:
-            SerializationError: If decoding fails or RON library not available
+            SerializationError: If decoding fails
         """
-        if not _RON_AVAILABLE:
-            raise SerializationError(
-                "RON library not available. RON format requires manual installation. "
-                "See: https://github.com/ron-rs/ron",
-                format_name=self.format_name
-            )
         try:
             # RON requires string input
             if isinstance(repr, bytes):

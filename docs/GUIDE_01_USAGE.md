@@ -8,8 +8,8 @@ How to use xwformats (output of GUIDE_41_DOCS).
 
 ## Quick start
 
-- **Facade:** `from exonware.xwformats import XWFormats` → `xf = XWFormats()`, `xf.list_formats()`, `xf.convert(data, "json", "yaml")`, `xf.get_serializer("parquet")` then encode/decode.
-- **Auto-detection:** Importing xwformats registers its formats with xwsystem’s codec registry; xwcodec, xwfile, xwserialization then include xwformats extensions when choosing by file extension.
+- **Facade:** `from exonware.xwformats import XWFormats as xf`, `xf.list_formats()`, `xf.get_serializer("parquet")` or `"ron"` then encode/decode. Converting between JSON/YAML/etc. works only if those codecs are registered (usually by importing xwsystem’s text serializers).
+- **Auto-detection:** Importing xwformats registers **its** codecs (e.g. Parquet, RON, UBJSON) with xwsystem’s registry; extensions for CSV/JSON/TOML/YAML/XML appear when xwsystem registers them.
 
 See [REF_14_DX.md](REF_14_DX.md) (key code, DX) and [REF_15_API.md](REF_15_API.md) (API reference). Project: [REF_22_PROJECT.md](REF_22_PROJECT.md). Format details: _archive/, changes/.
 

@@ -38,10 +38,11 @@ coverage.xml
 .pytest_cache/
 reports/
 
-# Virtual environments
+# Virtual environments (untracked only; if committed: git rm -r --cached .venv venv)
 venv/
-ENV/
+.venv/
 env/
+ENV/
 
 # IDEs
 .vscode/
@@ -65,6 +66,5 @@ Thumbs.db
 # Local private folders
 .secrets
 .references
-.venv
 .archive
 

@@ -5,8 +5,6 @@ Unit tests for MATLAB MAT serializer in xwformats.
 
 import pytest
 
-pytest.importorskip("scipy.io")
-
 from exonware.xwformats.formats.scientific import XWMatSerializer
 
 

@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.26
+Version: 0.9.0.27
 Generation Date: 07-Jan-2025
 Bincode Serialization - Rust's Native Binary Format
 Bincode is Rust's native binary serialization format that:
@@ -132,14 +132,8 @@ class ListTypeSerializer:
             return []
         return pickle.loads(data)
 # Register serializers for attrs2bin
-try:
-    attrs2bin.register_serializer(dict, DictTypeSerializer())
-except Exception:
-    pass
-try:
-    attrs2bin.register_serializer(list, ListTypeSerializer())
-except Exception:
-    pass
+attrs2bin.register_serializer(dict, DictTypeSerializer())
+attrs2bin.register_serializer(list, ListTypeSerializer())
 
 
 class BincodeSerializer(ASerialization):

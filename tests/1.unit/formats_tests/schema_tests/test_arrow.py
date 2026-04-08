@@ -13,14 +13,18 @@ Email: connect@exonware.com
 """
 
 from __future__ import annotations
-import pytest
-from pathlib import Path
+
 import tempfile
-pytest.importorskip("pyarrow")
+from pathlib import Path
+
+import pandas as pd
+import pytest
+
 from exonware.xwformats.formats.schema import ArrowSerializer
 from exonware.xwsystem.io.errors import SerializationError
-@pytest.mark.xwformats_unit
 
+
+@pytest.mark.xwformats_unit
 class TestArrowSerializer:
     """Unit tests for Apache Arrow serializer."""
 
@@ -68,8 +72,6 @@ class TestArrowSerializer:
 
     def test_encode_pandas_dataframe(self):
         """Test encoding pandas DataFrame to Arrow bytes."""
-        pytest.importorskip("pandas")
-        import pandas as pd
         serializer = ArrowSerializer()
         df = pd.DataFrame({
             "name": ["Alice", "Bob", "Charlie"],
@@ -106,8 +108,6 @@ class TestArrowSerializer:
 
     def test_decode_as_dataframe(self):
         """Test decoding Arrow bytes to pandas DataFrame."""
-        pytest.importorskip("pandas")
-        import pandas as pd
         serializer = ArrowSerializer()
         original = [
             {"name": "Alice", "age": 30},

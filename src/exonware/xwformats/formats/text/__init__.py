@@ -1,29 +1,12 @@
 #!/usr/bin/env python3
-#exonware/xwformats/src/exonware/xwformats/formats/text/__init__.py
+# exonware/xwformats/src/exonware/xwformats/formats/text/__init__.py
 """
-Enterprise text serialization formats.
+xwformats text formats — **RON only**.
 
-Company: eXonware.com
-Author: eXonware Backend Team
-Email: connect@exonware.com
-Version: 0.9.0.26
-Generation Date: 02-Nov-2025
-
-Text formats in xwformats extend the lightweight xwsystem core formats with
-enterprise-focused capabilities, optimizations, and additional metadata.
+For CSV, JSON, TOML, YAML, and XML, use
+``exonware.xwsystem.io.serialization.formats.text`` (import and register there).
 """
 
-from .csv import CsvSerializer
 from .ron import RonSerializer
-from .toml import TomlSerializer
-from .xml import XmlSerializer
-from .yaml import YamlSerializer
 
-__all__ = [
-    "CsvSerializer",
-    "RonSerializer",
-    "TomlSerializer",
-    "XmlSerializer",
-    "YamlSerializer",
-]
-
+__all__ = ["RonSerializer"]

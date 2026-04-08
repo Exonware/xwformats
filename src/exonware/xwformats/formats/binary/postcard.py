@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.26
+Version: 0.9.0.27
 Generation Date: 07-Jan-2025
 Postcard Serialization - Compact Binary Format for Embedded Systems
 Postcard is a compact binary serialization format designed for embedded systems:
@@ -27,9 +27,7 @@ Priority 5 (Extensibility): Support embedded systems and IoT use cases
 
 from typing import Any
 from pathlib import Path
-from dataclasses import dataclass
 from pypostcard.serde import to_postcard, from_postcard
-from serde import serialize, deserialize
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
 from exonware.xwsystem.io.defs import CodecCapability

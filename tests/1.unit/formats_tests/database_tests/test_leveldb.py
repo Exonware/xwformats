@@ -5,10 +5,23 @@ Unit tests for LevelDB serializer in xwformats.
 
 import pytest
 
-_ = pytest.importorskip("plyvel")
-
 from exonware.xwformats.formats.database import XWLeveldbSerializer
 from exonware.xwsystem.io.errors import SerializationError
+
+
+def _plyvel_usable() -> bool:
+    try:
+        import plyvel as p  # type: ignore[import-untyped]
+
+        return hasattr(p, "DB")
+    except Exception:
+        return False
+
+
+requires_plyvel = pytest.mark.skipif(
+    not _plyvel_usable(),
+    reason="plyvel / native LevelDB not available (common on Windows)",
+)
 
 
 @pytest.mark.xwformats_unit
@@ -39,6 +52,7 @@ class TestLevelDBSerializer:
         decoded = serializer.decode(encoded)
         assert decoded == original
 
+    @requires_plyvel
     def test_encode_to_file_creates_database(self, tmp_path):
         serializer = XWLeveldbSerializer()
         db_path = tmp_path / "test.ldb"
@@ -47,6 +61,7 @@ class TestLevelDBSerializer:
         serializer.encode_to_file(data, db_path)
         assert db_path.exists()
 
+    @requires_plyvel
     def test_decode_from_file_reads_database(self, tmp_path):
         serializer = XWLeveldbSerializer()
         db_path = tmp_path / "test.ldb"
@@ -56,6 +71,7 @@ class TestLevelDBSerializer:
         result = serializer.decode_from_file(db_path)
         assert result == data
 
+    @requires_plyvel
     def test_roundtrip_file_operations(self, tmp_path):
         serializer = XWLeveldbSerializer()
         db_path = tmp_path / "roundtrip.ldb"
@@ -69,6 +85,7 @@ class TestLevelDBSerializer:
         decoded = serializer.decode_from_file(db_path)
         assert decoded == original
 
+    @requires_plyvel
     def test_encode_to_file_non_dict_raises_error(self, tmp_path):
         serializer = XWLeveldbSerializer()
         db_path = tmp_path / "invalid.ldb"
@@ -76,6 +93,7 @@ class TestLevelDBSerializer:
         with pytest.raises(SerializationError, match="expects dict"):
             serializer.encode_to_file([1, 2, 3], db_path)
 
+    @requires_plyvel
     def test_handles_various_value_types(self, tmp_path):
         serializer = XWLeveldbSerializer()
         db_path = tmp_path / "types.ldb"
