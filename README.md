@@ -10,7 +10,7 @@
 
 ---
 
-## Install
+## 📦 Install
 
 | Install | What you get | When to use |
 |---------|--------------|-------------|
@@ -23,7 +23,7 @@ Base install pulls **`exonware-xwsystem[full]`** (CSV, JSON, TOML, YAML, XML, an
 
 ---
 
-## Quick start
+## 🚀 Quick start
 
 ```python
 from exonware.xwformats import XWFormats
@@ -40,7 +40,7 @@ Importing xwformats registers its formats with xwsystem; use xwsystem's codec/fa
 
 ---
 
-## What you get
+## ✨ What you get
 
 | Area | What's in it |
 |------|----------------|
@@ -54,7 +54,7 @@ Importing xwformats registers its formats with xwsystem; use xwsystem's codec/fa
 
 ---
 
-## Ecosystem functional contributions
+## 🌐 Ecosystem functional contributions
 
 `xwformats` extends format coverage; sibling XW libs provide runtime loading strategy, registration, and downstream consumption layers.
 You can use `xwformats` standalone for broad serializer coverage and conversion tasks.
@@ -73,7 +73,7 @@ Competitive edge: instead of isolated serializer plugins, `xwformats` plugs into
 
 ---
 
-## Docs and tests
+## 📖 Docs and tests
 
 Aligned with project REFs and [docs/GUIDE_01_USAGE.md](docs/GUIDE_01_USAGE.md) (see [GUIDE_63_README](../.docs/guides/GUIDE_63_README.md) in the monorepo).
 
@@ -85,20 +85,20 @@ Aligned with project REFs and [docs/GUIDE_01_USAGE.md](docs/GUIDE_01_USAGE.md) (
 
 ---
 
-## License and links
+## 📜 License and links
 
 Apache-2.0 - see [LICENSE](LICENSE).
 
 - **Homepage:** https://exonware.com  
 - **Repository:** https://github.com/exonware/xwformats  
 
-## Async Support
+## ⏱️ Async Support
 
 <!-- async-support:start -->
 - xwformats is primarily synchronous in its current implementation.
 - Source validation: 0 async def definitions and 0 await usages under src/.
 - This module still composes with async-capable xw libraries at integration boundaries when needed.
 <!-- async-support:end -->
-Version: 0.9.0.27 | Updated: 08-Apr-2026
+Version: 0.9.0.28 | Updated: 08-Apr-2026
 
 *Built with ❤️ by eXonware.com - Revolutionizing Python Development Since 2025*

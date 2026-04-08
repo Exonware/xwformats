@@ -49,10 +49,12 @@ text = "Apache-2.0"
 # First-party XW libs composed by this package (excludes exonware-xwsystem; see lazy/full).
 xw = []
 lazy = [
+  "exonware-xwformats[xw]",
   "exonware-xwlazy",
   "exonware-xwsystem[lazy]",
 ]
 full = [
+  "exonware-xwformats[xw]",
   "exonware-xwsystem[full]",
   # Schema formats (7 formats)
   "fastavro>=1.4.0",
