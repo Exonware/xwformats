@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.29
+Version: 0.9.0.30
 Generation Date: November 2, 2025
 
 Protocol Buffers serialization - Google's data interchange format.
