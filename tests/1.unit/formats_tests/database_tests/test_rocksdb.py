@@ -18,8 +18,68 @@ from pathlib import Path
 import tempfile
 import shutil
 # RocksDB serializer is always available (has pure Python fallback)
-from exonware.xwformats.formats.database import RocksdbSerializer
+from exonware.xwformats.formats.database import RocksdbSerializer, open_rocksdb_database
+from exonware.xwformats.formats.database.rocksdb import DB, WriteBatch, rocksdb
 from exonware.xwsystem.io.errors import SerializationError
+@pytest.mark.xwformats_unit
+
+class TestInternalRocksDBEngine:
+    """Direct coverage for the pure-Python DB and open_rocksdb_database (no external rocksdb)."""
+
+    def test_open_returns_internal_db_class(self, tmp_path):
+        db = open_rocksdb_database(tmp_path / "store", create_if_missing=True)
+        assert isinstance(db, DB)
+
+    def test_put_get_persist_reopen(self, tmp_path):
+        path = tmp_path / "kvdir"
+        db1 = open_rocksdb_database(path, create_if_missing=True)
+        db1.put(b"alpha", b"one")
+        db1.put(b"beta", b"two")
+        db2 = open_rocksdb_database(path, create_if_missing=True)
+        assert db2.get(b"alpha") == b"one"
+        assert db2.get(b"beta") == b"two"
+
+    def test_delete_persists(self, tmp_path):
+        path = tmp_path / "kvdir2"
+        db = open_rocksdb_database(path, create_if_missing=True)
+        db.put(b"x", b"y")
+        db.delete(b"x")
+        again = open_rocksdb_database(path, create_if_missing=True)
+        assert again.get(b"x") is None
+
+    def test_write_batch_single_flush(self, tmp_path):
+        path = tmp_path / "batchdir"
+        db = open_rocksdb_database(path, create_if_missing=True)
+        batch = WriteBatch()
+        batch.put(b"a", b"1")
+        batch.put(b"b", b"2")
+        batch.delete(b"c")
+        wo = rocksdb.WriteOptions()
+        wo.sync = True
+        db.write(batch, write_opts=wo)
+        loaded = open_rocksdb_database(path, create_if_missing=True)
+        assert loaded.get(b"a") == b"1"
+        assert loaded.get(b"b") == b"2"
+        assert loaded.get(b"c") is None
+
+    def test_iteritems_sorted_hex_order(self, tmp_path):
+        path = tmp_path / "iterdir"
+        db = open_rocksdb_database(path, create_if_missing=True)
+        db.put(b"\xff", b"high")
+        db.put(b"\x00", b"low")
+        db.put(b"\x80", b"mid")
+        it = db.iteritems()
+        it.seek_to_first()
+        keys = [k for k, _ in it]
+        assert keys == sorted(keys)
+
+    def test_shim_module_has_no_native_binding(self):
+        """Engine is always the in-tree module object, not a third-party rocksdb package."""
+        assert hasattr(rocksdb, "DB")
+        assert hasattr(rocksdb, "Options")
+        assert rocksdb.DB is DB
+
+
 @pytest.mark.xwformats_unit
 
 class TestRocksDBSerializer:

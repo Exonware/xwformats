@@ -6,7 +6,7 @@
 from .lmdb import XWLmdbSerializer, LmdbSerializer
 from .graphdb import XWGraphDbSerializer, GraphDbSerializer
 from .leveldb import XWLeveldbSerializer, LeveldbSerializer
-from .rocksdb import RocksdbSerializer
+from .rocksdb import RocksdbSerializer, open_rocksdb_database
 
 __all__ = [
     "XWLmdbSerializer",
@@ -16,5 +16,6 @@ __all__ = [
     "XWLeveldbSerializer",
     "LeveldbSerializer",
     "RocksdbSerializer",
+    "open_rocksdb_database",
 ]
 

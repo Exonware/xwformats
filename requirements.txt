@@ -2,7 +2,7 @@
 # Canonical source: pyproject.toml (GUIDE_42_CONFIG_PY). Regenerate with repo update_config when available.
 #
 # Base runtime (matches [project.dependencies]):
-# Source size (src/*): ~156.4 KB
+# Source size (src/*): ~160.1 KB
 exonware-xwlazy
 exonware-xwsystem
 #

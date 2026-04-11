@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.30
+Version: 0.9.0.31
 Generation Date: 07-Jan-2025
 Apache Arrow serialization - Columnar in-memory format.
 Apache Arrow is a cross-language development platform for in-memory data.

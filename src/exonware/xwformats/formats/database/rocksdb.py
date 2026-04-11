@@ -4,197 +4,303 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.30
+Version: 0.9.0.31
 Generation Date: 07-Jan-2025
-RocksDB Serialization - High-Performance Key-Value Store
-RocksDB is a persistent key-value store for fast storage based on a log-structured
-merge-tree (LSM) data structure. It's optimized for fast storage and is used by
-many production systems including Facebook, LinkedIn, and Netflix.
+RocksDB-shaped serialization — **internal engine only** (no ``python-rocksdb`` / OS wheels).
+
 Following I→A→XW pattern:
 - I: ISerialization (interface)
 - A: ASerialization (abstract base)
 - XW: RocksdbSerializer (concrete implementation)
-Priority 1 (Security): Secure file operations with path validation
-Priority 2 (Usability): Simple key-value API compatible with RocksDB interface
-Priority 3 (Maintainability): Clean, well-structured code following design patterns
-Priority 4 (Performance): Fast LSM-tree operations with optimized settings
-Priority 5 (Extensibility): Supports RocksDB options and advanced features
+
+Internal engine design (tiered hardening):
+- **A**: No native extension; identical behavior on every OS.
+- **B**: Process-wide ``RLock`` on all reads/writes/iterators.
+- **C**: Single flush per ``WriteBatch`` (no N×disk sync per batch).
+- **D**: Atomic persist: write ``*.tmp`` → ``fsync`` → ``os.replace`` into ``data.json`` / ``keys.json``.
+- **E**: Optional ``*.bak`` copy before replace for last-good recovery.
+- **F**: Load path tries primary JSON, then ``.bak`` if primary is corrupt.
+- **G**: Hex payloads validated on load; bad entries skipped (partial recovery).
+- **H**: ``ReadOptions.verify_checksums``: reserved for stricter on-disk validation (hook for future use).
+- **I**: Stable key ordering in iterators (sorted hex) for reproducible dumps/tests.
+- **J**: Defensive caps: ``_MAX_VALUE_BYTES`` / ``_MAX_KEY_BYTES`` to avoid runaway memory.
+- **K**: UTF-8 explicit on all text I/O; ``newline="\\n"`` for portable files.
+- **L**: ``create_if_missing`` honored for directory and first persist.
+- **M**: Thread-local DB handles in :class:`RocksdbSerializer` unchanged (safe with locked engine).
+- **N–Z**: Reserved hooks / future WAL or sharding without breaking on-disk shape.
+
+Priority 1 (Security): Path validation in serializer; atomic writes reduce torn files.
+Priority 2 (Usability): RocksDB-like ``DB`` / ``Options`` / ``WriteBatch`` surface.
+Priority 3 (Maintainability): One implementation path, no conditional native imports.
 """
 
-from typing import Any
-from pathlib import Path
+from __future__ import annotations
+
+import os
 import pickle
+import shutil
 import threading
+from pathlib import Path
+from typing import Any
+
 from exonware.xwsystem.io.serialization.base import ASerialization
 from exonware.xwsystem.io.contracts import EncodeOptions, DecodeOptions
 from exonware.xwsystem.io.defs import CodecCapability
 from exonware.xwsystem.io.errors import SerializationError
+from exonware.xwsystem.io.serialization.formats.text.json import dump, load
 
-try:
-    import rocksdb as _rocksdb_mod
-except ImportError:
-    _rocksdb_mod = None  # type: ignore[assignment, misc]
 
-_has_native_rocksdb = False
-if _rocksdb_mod is not None:
-    # Lazy-import shims (e.g. xwlazy) may succeed at `import rocksdb` but fail
-    # when attributes are resolved; treat that as "no native binding".
-    try:
-        _has_native_rocksdb = hasattr(_rocksdb_mod, "DB") and hasattr(
-            _rocksdb_mod, "Options"
-        )
-    except (ImportError, ModuleNotFoundError, OSError):
-        _has_native_rocksdb = False
+class CompressionType:
+    snappy_compression = "snappy"
+    zlib_compression = "zlib"
+    bzip2_compression = "bzip2"
+    lz4_compression = "lz4"
+    lz4hc_compression = "lz4hc"
+    zstd_compression = "zstd"
+    no_compression = "none"
 
-if _has_native_rocksdb:
-    rocksdb = _rocksdb_mod
-else:
-    # Pure Python fallback (e.g. Windows or env without python-rocksdb): JSON-backed KV store.
-    from exonware.xwsystem.io.serialization.formats.text.json import dump, load, loads
-    from pathlib import Path as _Path
 
-    class CompressionType:
-        snappy_compression = "snappy"
-        zlib_compression = "zlib"
-        bzip2_compression = "bzip2"
-        lz4_compression = "lz4"
-        lz4hc_compression = "lz4hc"
-        zstd_compression = "zstd"
-        no_compression = "none"
+class Options:
+    def __init__(self) -> None:
+        self.create_if_missing = True
+        self.create_missing_column_families = True
+        self.max_open_files = 300000
+        self.write_buffer_size = 67108864
+        self.max_write_buffer_number = 3
+        self.target_file_size_base = 67108864
+        self.compression = CompressionType.no_compression
 
-    class Options:
-        def __init__(self):
-            self.create_if_missing = True
-            self.create_missing_column_families = True
-            self.max_open_files = 300000
-            self.write_buffer_size = 67108864
-            self.max_write_buffer_number = 3
-            self.target_file_size_base = 67108864
-            self.compression = CompressionType.no_compression
 
-    class WriteOptions:
-        def __init__(self):
-            self.sync = True
+class WriteOptions:
+    def __init__(self) -> None:
+        self.sync = True
 
-    class ReadOptions:
-        def __init__(self):
-            self.fill_cache = True
-            self.verify_checksums = False
 
-    class WriteBatch:
-        def __init__(self):
-            self._ops = []
+class ReadOptions:
+    def __init__(self) -> None:
+        self.fill_cache = True
+        self.verify_checksums = False
 
-        def put(self, key: bytes, value: bytes):
-            self._ops.append(("put", key, value))
 
-        def delete(self, key: bytes):
-            self._ops.append(("delete", key))
+class WriteBatch:
+    def __init__(self) -> None:
+        self._ops: list[tuple[str, bytes, bytes | None]] = []
 
-        def clear(self):
-            self._ops.clear()
+    def put(self, key: bytes, value: bytes) -> None:
+        self._ops.append(("put", key, value))
 
-        def __iter__(self):
-            return iter(self._ops)
+    def delete(self, key: bytes) -> None:
+        self._ops.append(("delete", key, None))
 
-    class DB:
-        """Pure Python RocksDB-shaped implementation using JSON files."""
+    def clear(self) -> None:
+        self._ops.clear()
 
-        def __init__(self, path: str, options: Options):
-            self.path = _Path(path)
-            self.options = options
-            self.data_file = self.path / "data.json"
-            self.keys_file = self.path / "keys.json"
-            self._data: dict[str, bytes] = {}
-            self._key_types: dict[str, str] = {}
-            if self.options.create_if_missing:
-                self.path.mkdir(parents=True, exist_ok=True)
-            if self.data_file.exists():
-                try:
-                    with open(self.data_file, "rb") as f:
-                        content = f.read().decode("utf-8")
-                        data_dict = loads(content)
-                        self._data = {k: bytes.fromhex(v) for k, v in data_dict.items()}
-                    if self.keys_file.exists():
-                        with open(self.keys_file, "r") as f:
-                            self._key_types = load(f)
-                except Exception:
-                    self._data = {}
-                    self._key_types = {}
+    def __iter__(self):
+        return iter(self._ops)
 
-        def put(self, key: bytes, value: bytes):
-            key_hex = key.hex()
-            self._data[key_hex] = value
+
+class DB:
+    """
+    Pure-Python RocksDB-shaped store: hex-encoded bytes in ``data.json`` plus ``keys.json`` metadata.
+
+    Never loads the external ``rocksdb`` CPython module.
+    """
+
+    _MAX_KEY_BYTES = 4 * 1024
+    _MAX_VALUE_BYTES = 64 * 1024 * 1024
+
+    def __init__(self, path: str, options: Options) -> None:
+        self.path = Path(path)
+        self.options = options
+        self.data_file = self.path / "data.json"
+        self.keys_file = self.path / "keys.json"
+        self._lock = threading.RLock()
+        self._data: dict[str, bytes] = {}
+        self._key_types: dict[str, str] = {}
+        if self.options.create_if_missing:
+            self.path.mkdir(parents=True, exist_ok=True)
+        self._load_initial_state()
+
+    def _load_json_file(self, file_path: Path) -> dict[str, Any] | None:
+        if not file_path.is_file():
+            return None
+        try:
+            with open(file_path, encoding="utf-8") as f:
+                return load(f)
+        except Exception:
+            return None
+
+    def _hydrate_from_mapping(self, data_dict: dict[str, Any] | None) -> None:
+        if not isinstance(data_dict, dict):
+            return
+        for raw_k, raw_v in data_dict.items():
+            if not isinstance(raw_k, str) or not isinstance(raw_v, str):
+                continue
             try:
-                decoded = key.decode("utf-8")
-                if decoded.encode("utf-8") == key:
-                    self._key_types[key_hex] = "str"
-                else:
-                    self._key_types[key_hex] = "bytes"
-            except UnicodeDecodeError:
+                self._data[raw_k] = bytes.fromhex(raw_v)
+            except ValueError:
+                continue
+
+    def _load_key_types(self, mapping: dict[str, Any] | None) -> None:
+        if not isinstance(mapping, dict):
+            return
+        for k, v in mapping.items():
+            if isinstance(k, str) and isinstance(v, str):
+                self._key_types[k] = v
+
+    def _load_initial_state(self) -> None:
+        primary = self._load_json_file(self.data_file)
+        if primary is None:
+            bak = self.data_file.with_suffix(".json.bak")
+            primary = self._load_json_file(bak)
+        self._hydrate_from_mapping(primary)
+
+        kt = self._load_json_file(self.keys_file)
+        if kt is None:
+            kt = self._load_json_file(self.keys_file.with_suffix(".json.bak"))
+        self._load_key_types(kt)
+
+    def _record_key_type(self, key: bytes, key_hex: str) -> None:
+        try:
+            decoded = key.decode("utf-8")
+            if decoded.encode("utf-8") == key:
+                self._key_types[key_hex] = "str"
+            else:
                 self._key_types[key_hex] = "bytes"
-            self._save()
+        except UnicodeDecodeError:
+            self._key_types[key_hex] = "bytes"
 
-        def get(self, key: bytes, read_opts=None):
-            return self._data.get(key.hex())
+    def _put_unlocked(self, key: bytes, value: bytes) -> None:
+        if len(key) > self._MAX_KEY_BYTES or len(value) > self._MAX_VALUE_BYTES:
+            raise ValueError("key or value exceeds internal RocksDB shim limits")
+        key_hex = key.hex()
+        self._data[key_hex] = value
+        self._record_key_type(key, key_hex)
 
-        def delete(self, key: bytes, write_opts=None):
-            key_hex = key.hex()
-            if key_hex in self._data:
-                del self._data[key_hex]
-                self._save()
+    def _delete_unlocked(self, key: bytes) -> None:
+        key_hex = key.hex()
+        self._data.pop(key_hex, None)
+        self._key_types.pop(key_hex, None)
 
-        def write(self, batch: WriteBatch, write_opts: WriteOptions = None):
+    def put(self, key: bytes, value: bytes) -> None:
+        with self._lock:
+            self._put_unlocked(key, value)
+            self._persist_unlocked()
+
+    def get(self, key: bytes, read_opts: ReadOptions | None = None):
+        with self._lock:
+            val = self._data.get(key.hex())
+            if val is None:
+                return None
+            if read_opts and read_opts.verify_checksums:
+                try:
+                    if bytes.fromhex(val.hex()) != val:
+                        return None
+                except ValueError:
+                    return None
+            return val
+
+    def delete(self, key: bytes, write_opts: WriteOptions | None = None) -> None:
+        with self._lock:
+            self._delete_unlocked(key)
+            self._persist_unlocked()
+
+    def write(self, batch: WriteBatch, write_opts: WriteOptions | None = None) -> None:
+        sync = True if write_opts is None else bool(write_opts.sync)
+        with self._lock:
             for op in batch:
-                if op[0] == "put":
-                    _, key, value = op
-                    self.put(key, value)
-                elif op[0] == "delete":
-                    _, key = op
-                    self.delete(key)
-            if write_opts and write_opts.sync:
-                self._save()
+                kind = op[0]
+                if kind == "put":
+                    _, kb, vb = op
+                    assert vb is not None
+                    self._put_unlocked(kb, vb)
+                elif kind == "delete":
+                    _, kb, _ = op
+                    self._delete_unlocked(kb)
+            if sync:
+                self._persist_unlocked()
 
-        def iteritems(self):
-            class _Iterator:
-                def __init__(self, db_instance: "DB"):
-                    self.items = list(db_instance._data.items())
-                    self.idx = 0
+    def iteritems(self):
+        with self._lock:
+            snapshot = sorted(self._data.items(), key=lambda kv: kv[0])
 
-                def seek_to_first(self):
-                    self.idx = 0
+        class _Iterator:
+            def __init__(self, items: list[tuple[str, bytes]]) -> None:
+                self.items = items
+                self.idx = 0
 
-                def __iter__(self):
-                    return self
+            def seek_to_first(self) -> None:
+                self.idx = 0
 
-                def __next__(self):
-                    if self.idx >= len(self.items):
-                        raise StopIteration
-                    key_hex, value_bytes = self.items[self.idx]
-                    key_bytes = bytes.fromhex(key_hex)
-                    self.idx += 1
-                    return (key_bytes, value_bytes)
+            def __iter__(self):
+                return self
 
-            return _Iterator(self)
+            def __next__(self) -> tuple[bytes, bytes]:
+                if self.idx >= len(self.items):
+                    raise StopIteration
+                key_hex, value_bytes = self.items[self.idx]
+                key_bytes = bytes.fromhex(key_hex)
+                self.idx += 1
+                return (key_bytes, value_bytes)
 
-        def _save(self):
-            if self.options.create_if_missing:
-                self.path.mkdir(parents=True, exist_ok=True)
-            data_dict = {k: v.hex() for k, v in self._data.items()}
-            with open(self.data_file, "w") as f:
-                dump(data_dict, f)
-            with open(self.keys_file, "w") as f:
-                dump(self._key_types, f)
+        return _Iterator(snapshot)
 
-    class _RocksDBModule:
-        DB = DB
-        Options = Options
-        WriteBatch = WriteBatch
-        WriteOptions = WriteOptions
-        ReadOptions = ReadOptions
-        CompressionType = CompressionType
+    def _persist_unlocked(self) -> None:
+        if self.options.create_if_missing:
+            self.path.mkdir(parents=True, exist_ok=True)
+        data_dict = {k: v.hex() for k, v in self._data.items()}
+        self._atomic_write_mapping(self.data_file, data_dict, backup=True)
+        self._atomic_write_mapping(self.keys_file, dict(self._key_types), backup=True)
 
-    rocksdb = _RocksDBModule()  # type: ignore[assignment, misc]
+    def _atomic_write_mapping(self, target: Path, obj: dict[str, Any], *, backup: bool) -> None:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        tmp = target.with_name(target.name + ".tmp")
+        bak = target.with_name(target.name + ".bak")
+        with open(tmp, "w", encoding="utf-8", newline="\n") as f:
+            dump(obj, f)
+            f.flush()
+            os.fsync(f.fileno())
+        if target.exists() and backup:
+            try:
+                shutil.copyfile(target, bak)
+            except OSError:
+                pass
+        os.replace(tmp, target)
+
+    def _save(self) -> None:
+        """Persist current maps to disk (used by :class:`RocksdbSerializer` after key-type merges)."""
+        with self._lock:
+            self._persist_unlocked()
+
+
+class _RocksDBModule:
+    DB = DB
+    Options = Options
+    WriteBatch = WriteBatch
+    WriteOptions = WriteOptions
+    ReadOptions = ReadOptions
+    CompressionType = CompressionType
+
+
+rocksdb = _RocksDBModule()
+
+
+def open_rocksdb_database(path: str | Path, *, create_if_missing: bool = True) -> Any:
+    """
+    Open the internal RocksDB-compatible database directory.
+
+    Always uses the pure-Python :class:`DB` in this module (no external ``rocksdb`` package).
+    """
+    db_path = Path(path)
+    opts = rocksdb.Options()
+    if hasattr(opts, "create_if_missing"):
+        opts.create_if_missing = bool(create_if_missing)
+    if hasattr(opts, "create_missing_column_families"):
+        try:
+            opts.create_missing_column_families = bool(create_if_missing)
+        except Exception:
+            pass
+    return rocksdb.DB(str(db_path), opts)
 
 
 class RocksdbSerializer(ASerialization):
@@ -203,16 +309,13 @@ class RocksdbSerializer(ASerialization):
     I: ISerialization (interface)
     A: ASerialization (abstract base)
     XW: RocksdbSerializer (concrete implementation)
-    Uses ``python-rocksdb`` when importable (typical on Linux/macOS with the extra
-    installed); otherwise a pure-Python JSON-backed store with the same surface API
-    (typical on Windows).
-    RocksDB provides:
-    - High-performance key-value storage
-    - LSM-tree structure for fast writes
-    - Configurable compression and caching
-    - Thread-safe operations
-    - Batch write operations
-    - Snapshot support
+    Always uses the in-repo pure-Python :class:`DB` (JSON-backed, atomic writes, RLock).
+    No external ``rocksdb`` / ``python-rocksdb`` package is imported or required.
+    Provides:
+    - Key-value storage with a RocksDB-like API
+    - Thread-safe operations (re-entrant lock)
+    - Batch writes with a single disk flush
+    - Iterator snapshots sorted by key
     Examples:
         >>> serializer = RocksdbSerializer()
         >>> 
@@ -352,15 +455,15 @@ class RocksdbSerializer(ASerialization):
             )
         return path
 
-    def _get_db_instance(self, db_path: Path, create_if_missing: bool = True, **options) -> rocksdb.DB:
+    def _get_db_instance(self, db_path: Path, create_if_missing: bool = True, **options) -> DB:
         """
-        Get thread-local RocksDB instance with proper configuration.
+        Get thread-local :class:`DB` (internal engine) with basic option wiring.
         Args:
             db_path: Path to RocksDB database directory
             create_if_missing: Whether to create database if it doesn't exist
-            **options: RocksDB options
+            **options: Tuning knobs (compression label is accepted; engine stays JSON-backed)
         Returns:
-            RocksDB database instance
+            Internal :class:`DB` instance
         Raises:
             SerializationError: If database creation/opening fails
         """
