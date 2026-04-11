@@ -1,12 +1,12 @@
-# exonware-xwformats — lockfile-style list for tooling that still reads requirements.txt.
+# exonware-xwformats==0.9.0.31 — lockfile-style list for tooling that still reads requirements.txt.
 # Canonical source: pyproject.toml (GUIDE_42_CONFIG_PY). Regenerate with repo update_config when available.
 #
 # Base runtime (matches [project.dependencies]):
 # Source size (src/*): ~160.1 KB
-exonware-xwlazy
-exonware-xwsystem
+exonware-xwlazy==1.0.1.80
+exonware-xwsystem==0.9.0.37
 #
-# Full format stack: pip install "exonware-xwformats[full]" (see optional-dependencies in pyproject.toml).
-# Dev tools: pip install "exonware-xwformats[dev]"
+# Full format stack: pip install "exonware-xwformats[full]==0.9.0.31" (see optional-dependencies in pyproject.toml).
+# Dev tools: pip install "exonware-xwformats[dev]==0.9.0.31"
 ron
 google

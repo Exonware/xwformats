@@ -4,7 +4,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.31
+Version: 0.9.0.32
 Generation Date: 07-Jan-2025
 RocksDB-shaped serialization — **internal engine only** (no ``python-rocksdb`` / OS wheels).
 
