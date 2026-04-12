@@ -2,7 +2,7 @@
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.32
+Version: 0.9.0.33
 Generation Date: November 2, 2025
 
 GraphDB serialization - Graph database serialization.
