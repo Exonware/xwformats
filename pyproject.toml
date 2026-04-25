@@ -35,7 +35,7 @@ classifiers = [
 ]
 
 dependencies = [
-  "exonware-xwsystem==0.9.0.38",
+  "exonware-xwsystem==0.9.0.42",
 ]
 
 [[project.authors]]
@@ -49,13 +49,13 @@ text = "Apache-2.0"
 # First-party XW libs composed by this package (excludes exonware-xwsystem==0.9.0.37; see lazy/full).
 xw = []
 lazy = [
-  "exonware-xwformats[xw]==0.9.0.32",
-  "exonware-xwlazy==1.0.1.81",
-  "exonware-xwsystem[lazy]==0.9.0.38",
+  "exonware-xwformats[xw]==0.9.0.33",
+  "exonware-xwlazy==1.0.1.82",
+  "exonware-xwsystem[lazy]==0.9.0.42",
 ]
 full = [
-  "exonware-xwformats[xw]==0.9.0.32",
-  "exonware-xwsystem[full]==0.9.0.38",
+  "exonware-xwformats[xw]==0.9.0.33",
+  "exonware-xwsystem[full]==0.9.0.42",
   # Schema formats (7 formats)
   "fastavro>=1.4.0",
   "protobuf>=3.19.0",
@@ -82,7 +82,7 @@ full = [
   "lxml>=4.9.0",
 ]
 dev = [
-  "exonware-xwformats[full]==0.9.0.32",
+  "exonware-xwformats[full]==0.9.0.33",
   "black>=23.0.0",
   "isort>=5.12.0",
   "mypy>=1.0.0",

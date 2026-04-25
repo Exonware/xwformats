@@ -10,7 +10,7 @@ specialized domains (scientific computing, big data, enterprise systems).
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.33
+Version: 0.9.0.34
 Generation Date: 02-Nov-2025
 
 Formats provided:
