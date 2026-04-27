@@ -10,7 +10,7 @@ name = "xwformats"
 dynamic = [
     "version",
 ]
-description = "Convenience wrapper for exonware-xwformats - provides 'import xwformats' alias"
+description = "Convenience wrapper for exonware-xwformats==0.9.0.34 - provides 'import xwformats' alias"
 readme = "README.md"
 requires-python = ">=3.12"
 keywords = [
@@ -38,7 +38,7 @@ classifiers = [
     "Topic :: Scientific/Engineering",
 ]
 dependencies = [
-    "exonware-xwformats",
+    "exonware-xwformats==0.9.0.34",
 ]
 authors = [
     { name = "Eng. Muhammad AlShehri", email = "connect@exonware.com" },
@@ -50,16 +50,16 @@ text = "Apache-2.0"
 [project.optional-dependencies]
 # First-party XW libs composed by this package (excludes exonware-xwsystem==0.9.0.37; see lazy/full).
 xw = [
-    "exonware-xwformats[xw]",
+    "exonware-xwformats[xw]==0.9.0.34",
 ]
 lazy = [
-    "exonware-xwformats[lazy]",
+    "exonware-xwformats[lazy]==0.9.0.34",
 ]
 full = [
-    "exonware-xwformats[full]",
+    "exonware-xwformats[full]==0.9.0.34",
 ]
 dev = [
-    "exonware-xwformats[dev]",
+    "exonware-xwformats[dev]==0.9.0.34",
 ]
 
 [project.urls]
